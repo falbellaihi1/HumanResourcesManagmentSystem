@@ -1,0 +1,191 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html">
+        <script>
+            html, body {margin:0; padding:0; height:100 % ; }
+        </script>
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>مفاهيم</title>
+            </f:facet>
+
+        </h:head>
+
+        <h:body style="background-color: #ff6600; height:100%">
+            <h:form>
+                <p:outputPanel style="background-color: #ff6600; color: white; font-size:40px; font-weight: bold; width: 100%; height: 160px; direction: rtl">
+                    برنامج مفاهيم لأدارة الموارد البشرية
+                    <br/>
+                    <p:outputLabel style="color:white; font-size: 15px;" value=" قسم نظم المعلومات والتطوير"/> 
+                </p:outputPanel>
+
+
+                <h:form>     
+                    <p:growl id="messages" showDetail="true" />
+
+                    <p:toolbar>
+                        <f:facet name="left">
+                            <p:button outcome="AdminControlPanel" value="متابعة الطلبات وسير العمل" icon="ui-icon-home">
+                            </p:button>
+                            <p:button outcome="ManageEmp" value="الموظفين" icon="ui-icon-person">
+                            </p:button>
+                            <p:button outcome="Workinfo" value="معلومات" icon="ui-icon-gear">
+                            </p:button>
+                            <p:button outcome="WorkSchedules" value="رفع طلب جديد" icon="ui-icon-clock">
+                            </p:button>
+                            <p:button outcome="Calendar" value="الرواتب" icon="ui-icon-calendar">
+                            </p:button>
+                            <p:commandButton  rendered="#{controller.username !=null}" action ="#{controller.logout()}" ajax="false" value="تسجيل الخروج" icon="ui-icon-power"/>
+
+
+                        </f:facet>
+
+                    </p:toolbar>
+                </h:form>
+                <p:separator />
+                <p:outputPanel style="text-align: center; background-color:white; vertical-align: middle; height:100%; padding-top: 250px;" >
+
+
+                    <h1 style=" color: #ff6600"> #{controller.username} مرحباَ </h1> 
+                    <body> هنا يمكنك متابعة سير العمل والطلبات </body>
+
+                    <p:panel id="works" header="سير العمل">
+
+                        <p:dataTable cellSeparator="true" editMode="cell" editable="true" id="TaskTable" var="task" value="#{controller.tasksList}" paginator="true"    rows="10" rowIndexVar="index">
+
+
+                            <p:column headerText="رقم المعاملة">
+
+                                <h:outputText value="#{task.taskID}" />
+
+                            </p:column>
+
+                            <p:column headerText="تاريخ استلام المعاملة">
+
+
+                                <h:outputText value="#{task.startDate}" />
+
+
+
+
+                            </p:column>
+
+
+                            <p:column headerText="تاريخ انتهاء المعاملة">
+
+
+                                <h:outputText value="#{task.endDate}" />
+
+
+
+                            </p:column>
+
+
+
+                            <p:column headerText="نوع المعاملة">
+
+
+                                <h:outputText value="#{task.fertilizer}" />
+
+
+
+
+                            </p:column>
+
+
+                            <p:column headerText="المسؤول عن المعاملة">
+
+
+                                <h:outputText value="#{task.waterAmount}" />
+
+
+
+
+                            </p:column>
+
+
+                            <p:column headerText="تاريخ اخر تحديث">
+
+
+                                <h:outputText value="#{task.waterTime}"/>
+
+
+                            </p:column>
+
+
+
+                            <p:column headerText="ملاحظات">
+
+                                <h:outputText value="#{task.otherNotes}" />
+
+
+
+                            </p:column>
+
+                        </p:dataTable>
+                    </p:panel>
+                    <p:panel id="requests" header="طلبات الاستقالة">
+                        <p:dataTable cellSeparator="true"  id="PlantsTable" var="resr" value="#{controller.resignList}" paginator="true" rows="10" rowIndexVar="index">
+
+
+                            <p:column headerText="رقم الطلب">
+
+                                <h:outputText value="#{resr.id}" />
+
+                            </p:column>
+
+                            <p:column headerText="رقم الموظف">
+
+
+                                <h:outputText value="#{resr.employeeNum}" />
+
+
+
+                            </p:column>
+
+
+                            <p:column headerText="اسم الموظف">
+
+                                <h:outputText value="#{resr.name}" />
+
+                            </p:column>
+                            <p:column headerText="رقم الموظف">
+
+                                <h:outputText value="#{resr.employeeNum}" />
+
+                            </p:column>
+                            <p:column headerText="رقم بطاقة الاحوال">
+
+                                <h:outputText value="#{resr.nationalID}" />
+
+                            </p:column>
+                               <p:column headerText="ملاحظات الطلب">
+
+                                   <h:outputText value="#{resr.notes}" />
+
+                            </p:column>
+                       
+                            <p:column headerText="مرحلة الطلب">
+
+                                <h:outputText value="#{resr.userID}" />
+
+                            </p:column>
+
+                        </p:dataTable>
+
+                    </p:panel>
+                </p:outputPanel>
+
+
+            </h:form>
+        </h:body>
+
+    </f:view>
+</html>
+
