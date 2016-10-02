@@ -28,81 +28,121 @@
                 </p:toolbar>
 
                 <p:separator />
+                <h:panelGroup id="content" layout="block">
+
+                    <p:dataTable   tableStyle="width:auto" cellSeparator="true" editMode="cell" editable="true" id="WorkerTable"
+                                   var="workerInfo" value="#{controller.workerList}" paginator="true"   
+                                   rows="3" rowIndexVar="index"   style=" size: auto">
 
 
-                <p:dataTable   tableStyle="width:auto" cellSeparator="true" editMode="cell" editable="true" id="WorkerTable"
-                               var="workerInfo" value="#{controller.workerList}" paginator="true"   
-                               rows="5" rowIndexVar="index"   style=" size: auto">
+                        <p:column   style="width: 3%" headerText="رقم التعريف">
 
+                            <h:outputText value="#{workerInfo.id}" />
 
-                    <p:column   style="width: 3%" headerText="رقم التعريف">
-
-                        <h:outputText value="#{workerInfo.id}" />
-
-                    </p:column>
+                        </p:column>
 
 
 
-                    <p:column   style="width: 3%" headerText="اسم العامل">
+                        <p:column   style="width: 3%" headerText="اسم العامل">
 
-                        <h:outputText value="#{workerInfo.workerName}" />
+                            <h:outputText value="#{workerInfo.workerName}" />
 
-                    </p:column>
+                        </p:column>
 
-                    <p:column   style="width: 3%" headerText="اسم العامل">
+                        <p:column   style="width: 3%" headerText="اسم العامل">
 
-                        <h:outputText value="#{workerInfo.nationality}" />
+                            <h:outputText value="#{workerInfo.nationality}" />
 
-                    </p:column>
+                        </p:column>
 
 
-                    <p:column   style="width: 3%" headerText="رقم الاقامة">
+                        <p:column   style="width: 3%" headerText="رقم الاقامة">
 
-                        <h:outputText value="#{workerInfo.residenceCardNumber}" />
+                            <h:outputText value="#{workerInfo.residenceCardNumber}" />
 
-                    </p:column>
-                    <p:column   style="width: 3%" headerText="رقم الجواز">
+                        </p:column>
+                        <p:column   style="width: 3%" headerText="رقم الجواز">
 
-                        <h:outputText value="#{workerInfo.passportNumber}" />
+                            <h:outputText value="#{workerInfo.passportNumber}" />
 
-                    </p:column>
-                    <p:column   style="width: 3%" headerText="رقم الحساب البنكي">
+                        </p:column>
+                        <p:column   style="width: 3%" headerText="رقم الحساب البنكي">
 
-                        <h:outputText value="#{workerInfo.bankAccountNumber}" />
+                            <h:outputText value="#{workerInfo.bankAccountNumber}" />
 
-                    </p:column>
-                     <p:column   style="width: 3%" headerText="رقم الحدود">
+                        </p:column>
+                        <p:column   style="width: 3%" headerText="رقم الحدود">
 
-                         <h:outputText value="#{workerInfo.enteryIDNumber}" />
+                            <h:outputText value="#{workerInfo.enteryIDNumber}" />
 
-                    </p:column>   
-                    <p:column   style="width: 3%" headerText="رقم التأمين">
+                        </p:column>   
+                        <p:column   style="width: 3%" headerText="رقم التأمين">
 
-                        <h:outputText value="#{workerInfo.insuranceNumber}" />
+                            <h:outputText value="#{workerInfo.insuranceNumber}" />
 
-                    </p:column>
-                    
+                        </p:column>
 
-                    <p:column   style="width: 3%" headerText="تاريخ انتهاء الجواز">
 
-                        <h:outputText value="#{workerInfo.passportExpiry}" />
+                        <p:column   style="width: 3%" headerText="تاريخ انتهاء الجواز">
 
-                    </p:column>
-                    <p:column   style="width: 3%" headerText="تاريخ انتهاء الأقامة">
+                            <h:outputText value="#{workerInfo.passportExpiry}" />
 
-                        <h:outputText value="#{workerInfo.residenceCardExpiry}" />
+                        </p:column>
+                        <p:column   style="width: 3%" headerText="تاريخ انتهاء الأقامة">
 
-                    </p:column>
+                            <h:outputText value="#{workerInfo.residenceCardExpiry}" />
 
-                    <p:column   style="width: 3%" headerText="تاريخ انتهاء الأقامة">
+                        </p:column>
 
-                        <h:outputText value="#{workerInfo.enteryDate}" />
+                        <p:column   style="width: 3%" headerText="تاريخ انتهاء الأقامة">
 
-                    </p:column>
+                            <h:outputText value="#{workerInfo.enteryDate}" />
 
-                    <p:column   style="width: 3%" headerText="التنبيهات">
+                        </p:column>
 
-                        <h:outputText value="#{controller.WarnWorkerUpdates(workerInfo)}" />
+                        <p:column   style="width: 3%;"  headerText="التنبيهات">
+
+                            <p:commandButton value="اظهار التنبيهات"   onclick="PF('u').show()" />
+
+                            <h:outputText value="#{controller.WarnWorkerUpdates(workerInfo)}" />
+
+
+
+
+                        </p:column>
+
+                        <p:column   style="width: 3%" headerText="">
+
+                            <p:commandButton value="صفحة العامل"
+                                             oncomplete="window.open('WorkerProfile.xhtml')" icon="ui-icon-calendar">
+                                <p:ajax listener="#{controller.createWorkerProfile(workerInfo,index)}" />
+                            </p:commandButton>
+
+
+
+                        </p:column>
+
+
+                    </p:dataTable>
+                </h:panelGroup>
+
+
+
+
+
+
+
+
+
+
+
+
+            </h:form>
+            <p:dialog id='ud' widgetVar="u" modal="true">
+                <h:form id="warns">
+                    <p:panelGrid columns="2">
+
+                        <!--need revision right here workinfo is keeping variables same value, you need to send new object each time u click on worker -->
                         <h:outputText style=" color:  #D20005" value="#{controller.warnWorkerUpdatesCommentPic}" />
                         <p:separator />
                         <h:outputText style=" color:  #D20005" value="#{controller.warnWorkerUpdatesCommentCardPic}" />
@@ -110,24 +150,20 @@
                         <h:outputText style=" color:  #D20005" value="#{controller.warnWorkerUpdatesCommentPassportPic}" />
                         <p:separator />
                         <h:outputText style=" color:  #D20005" value="#{controller.warnWorkerUpdatesCommentOtherAttachment}" />
-                    </p:column>
+                        <p:separator />
+                        <h:outputText style=" color:  #D20005" value="#{controller.warnWorkerUpdatesCommentEnteryIDNumber}" />
+                        <p:separator />
+                        <h:outputText style=" color:  #D20005" value="#{controller.warnWorkerUpdatesCommentInsuranceNumber}" />
 
-                    <p:column   style="width: 3%" headerText="">
+                    </p:panelGrid>
 
-                        <p:commandButton value="صفحة العامل"
-                                         oncomplete="window.open('WorkerProfile.xhtml')" icon="ui-icon-calendar">
-                            <p:ajax listener="#{controller.createWorkerProfile(workerInfo,index)}" />
-                        </p:commandButton>
-
-
-
-                    </p:column>
-
-                </p:dataTable>
+                </h:form>
+            </p:dialog>
 
 
-                <p:dialog header="اظافة موظف جديد" widgetVar="add" minHeight="40">
 
+            <p:dialog header="اظافة موظف جديد" widgetVar="add" minHeight="40">
+                <h:form id="addWorker">
                     <h:outputText value="ادخل معلومات الموظف" />
                     <p:panelGrid  columns="2">
 
@@ -146,6 +182,12 @@
 
                         <p:outputLabel value="رقم الحساب البنكي"/> 
                         <p:inputText value="#{controller.newBankAccountNumber}"  required="true" requiredMessage="حقل الاسم اجباري"/>
+
+                        <p:outputLabel value="رقم الحدود"/> 
+                        <p:inputText value="#{controller.enteryIDNumber}"  required="true" requiredMessage="حقل الاسم اجباري"/>
+
+                        <p:outputLabel value="رقم التأمين الصحي"/> 
+                        <p:inputText value="#{controller.insuranceNumber}"  required="true" requiredMessage="حقل الاسم اجباري"/>
 
                         <p:outputLabel value="تاريخ انتهاءالأقامة" /> 
                         <p:calendar  value="#{controller.newResidenceCardExpiry}"/>
@@ -195,14 +237,9 @@
 
                     </p:panelGrid>
 
+                </h:form>
+            </p:dialog>
 
-                </p:dialog>
-
-
-
-
-
-            </h:form>
         </h:body>
     </ui:define>
 
