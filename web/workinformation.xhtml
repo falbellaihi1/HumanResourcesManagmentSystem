@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./templates/Template.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns="http://www.w3.org/1999/xhtml">
+
+    <ui:define name="content">
+        <h:body style=" height:100%" onload="#{controller.accessUserInfo()}">
+          <h:form id="f0" rendered="#{controller.type ==0}" >
+                <p:messages autoUpdate="true" id="messages" showDetail="true"  />
+
+                <p:toolbar  >
+                    <f:facet name="left">
+                        <p:button outcome="ControlPanel" value="متابعة الطلبات وسير العمل" icon="ui-icon-home" >
+                        </p:button>
+
+                        <p:commandButton value="طباعة" type="button" icon="ui-icon-print" >
+                            <p:printer target="image" /></p:commandButton> <p:graphicImage id="image"  />
+
+
+                      
+                        <p:commandButton rendered="#{controller.username !=null}" action ="#{controller.logout()}" ajax="false" value="تسجيل الخروج" icon="ui-icon-power"/>
+                        <p:inputText id="text"  required="false" label="text"   value="#{controller.a}"  />
+                        
+
+                    </f:facet>
+
+
+                </p:toolbar>
+                
+                
+                
+
+
+
+
+
+              
+                    <h:outputLabel   title="نظام العمل والعمال" />
+                    
+                    <object type="application/pdf" data="https://www.hrdf.org.sa/Content/files/labor_system.pdf" height="800px" width="100%" internalinstanceid="4">
+                        Your browser can't display pdf, <a href="https://www.hrdf.org.sa/Content/files/labor_system.pdf">click</a> to download pdf instead.
+                    </object>
+                
+
+
+            </h:form>
+            <p:outputLabel  style="color:white" rendered="#{controller.type !=0}" value="OOPs!"/>
+        </h:body>
+                
+                
+    </ui:define>
+
+</ui:composition>

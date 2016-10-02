@@ -1,0 +1,348 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./templates/Template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+
+
+        <h:body style=" height:100%">
+            <h:form rendered="#{controller.type ==0}">
+
+                <p:growl id="messages" showDetail="true"/>
+
+                <p:toolbar>
+                    <f:facet name="left">
+                        <p:button outcome="ControlPanel" value="متابعة الطلبات وسير العمل" icon="ui-icon-home" >
+                        </p:button>
+
+                        <p:menuButton id="mb" value="رفع طلب جديد">
+                            <p:menuitem value="طلب استقالة"  icon="ui-icon-disk" onclick="PF('resign').show();"/>
+                            <p:menuitem value="طلب  مالي"   icon="ui-icon-arrowrefresh-1-w" onclick="PF('money').show();"/>
+                            <p:menuitem value="طلب اجازة"  icon="ui-icon-close" onclick="PF('vacation').show();"/>
+
+
+                        </p:menuButton>
+                        <p:commandButton value="طباعة" type="button" icon="ui-icon-print" >
+                            <p:printer target="image" /></p:commandButton> <p:graphicImage id="image"  />
+
+                        <p:commandButton rendered="#{controller.username !=null}" action ="#{controller.logout()}" ajax="false" value="تسجيل الخروج" icon="ui-icon-power"/>
+
+
+                    </f:facet>
+
+
+                </p:toolbar>
+                <p:separator />
+
+
+
+
+
+
+                <p:panel id="resp" header='طلبات الاستقالة'  >
+                    <h:form>
+
+                        <p:dataTable id="resignTable1" cellSeparator="true" editMode="cell" editable="true"  var="resign" value="#{controller.resignList}" paginator="true"    rows="10" rowIndexVar="index1">
+                            <p:ajax id="aj" event="cellEdit" listener="#{controller.editUser(user)}" update="resignTable1"/>
+
+                            <p:column headerText="الرقم الوظيفي">
+                                <p:cellEditor>
+                                    <f:facet name="output"> <h:outputText value="#{resign.employeeNum}" /></f:facet>
+                                    <f:facet name="input"> <h:inputText value="#{resign.employeeNum}" /></f:facet>
+
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="الاسم">
+                                <p:cellEditor>
+                                    <f:facet name="output"> <h:outputText value="#{resign.name}" /></f:facet>
+                                    <f:facet name="input"> <h:inputText value="#{resign.name}" /></f:facet>
+
+                                </p:cellEditor>
+                            </p:column>
+
+
+
+                            <p:column headerText="رقم الطلب">
+                                <p:cellEditor>
+                                    <f:facet name="output"> <h:outputText value="#{resign.id}" /></f:facet>
+                                    <f:facet name="input"> <h:inputText value="#{resign.id}" /></f:facet>
+
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="المسؤول عن الطلب">
+                                <p:cellEditor>
+                                    <f:facet name="output"> <h:outputText value="#{resign.userID}" /></f:facet>
+                                    <f:facet name="input"> <h:inputText value="#{resign.userID}" /></f:facet>
+
+                                </p:cellEditor>
+                            </p:column>
+
+
+                            <p:column headerText="الملاحظات">
+                                <p:cellEditor>
+                                    <f:facet name="output"> <h:outputText value="#{resign.notes}" /></f:facet>
+                                    <f:facet name="input"> <h:inputText value="#{resign.notes}" /></f:facet>
+
+                                </p:cellEditor>
+                            </p:column>
+
+
+                            <p:column headerText="ارسال الى موظف">
+
+
+                                <p:selectOneMenu id="AssignUser2"  value="#{controller.editAssignUser}" style="width:150px" converter="UConverter"> 
+                                    <p:ajax listener="#{controller.editRequestStep(resign)}" update="@all"/>
+                                    <f:selectItems value="#{controller.usersList}"  var="user" itemLabel="#{user.username}" >
+
+
+
+                                    </f:selectItems>
+
+                                </p:selectOneMenu >
+                            </p:column>
+                            <p:column style="width: 10%">
+                                <p:commandButton id="db" icon="ui-icon-trash" value="حذف الطلب" title="حذف "
+                                                 actionListener="#{controller.removeResign(resign.id, index1)}" 
+                                                 update="resignTable1" />
+                            </p:column>
+                                <p:column headerText="التنبيهات">
+                               
+                                   <h:outputText value="#{resign.notes}" />
+
+                            </p:column>
+
+                        </p:dataTable>
+                    </h:form>
+
+                </p:panel>
+
+
+                <p:panel id="requests2" header="الطلبات المالية"  >
+
+
+                    <p:dataTable cellSeparator="true" editMode="cell" editable="true" id="resignTable2" var="resign" value="#{controller.resignList}" paginator="true"    rows="10" rowIndexVar="index">
+                      
+
+                        <p:column headerText="الرقم الوظيفي">
+                            <p:cellEditor>
+                                <f:facet name="output"> <h:outputText value="#{resign.employeeNum}" /></f:facet>
+                                <f:facet name="input"> <h:inputText value="#{resign.employeeNum}" /></f:facet>
+
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column headerText="الاسم">
+                            <p:cellEditor>
+                                <f:facet name="output"> <h:outputText value="#{resign.name}" /></f:facet>
+                                <f:facet name="input"> <h:inputText value="#{resign.name}" /></f:facet>
+
+                            </p:cellEditor>
+                        </p:column>
+
+
+
+                        <p:column headerText="رقم الطلب">
+                            <p:cellEditor>
+                                <f:facet name="output"> <h:outputText value="#{resign.id}" /></f:facet>
+                                <f:facet name="input"> <h:inputText value="#{resign.id}" /></f:facet>
+
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column headerText="المسؤول عن الطلب">
+                            <p:cellEditor>
+                                <f:facet name="output"> <h:outputText value="#{resign.userID}" /></f:facet>
+                                <f:facet name="input"> <h:inputText value="#{resign.userID}" /></f:facet>
+
+                            </p:cellEditor>
+                        </p:column>
+
+
+                        <p:column headerText="الملاحظات">
+                            <p:cellEditor>
+                                <f:facet name="output"> <h:outputText value="#{resign.notes}" /></f:facet>
+                                <f:facet name="input"> <h:inputText value="#{resign.notes}" /></f:facet>
+
+                            </p:cellEditor>
+                        </p:column>
+
+
+
+                    </p:dataTable>
+
+
+                </p:panel>
+
+
+
+                <p:panel id="requests3" header="طلبات الاجازات"  >
+
+
+                    <p:dataTable cellSeparator="true" editMode="cell" editable="true" id="resignTable3" var="resign" value="#{controller.resignList}" paginator="true"    rows="10" rowIndexVar="index">
+                       
+
+                        <p:column headerText="الرقم الوظيفي">
+                            <p:cellEditor>
+                                <f:facet name="output"> <h:outputText value="#{resign.employeeNum}" /></f:facet>
+                                <f:facet name="input"> <h:inputText value="#{resign.employeeNum}" /></f:facet>
+
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column headerText="الاسم">
+                            <p:cellEditor>
+                                <f:facet name="output"> <h:outputText value="#{resign.name}" /></f:facet>
+                                <f:facet name="input"> <h:inputText value="#{resign.name}" /></f:facet>
+
+                            </p:cellEditor>
+                        </p:column>
+
+
+
+                        <p:column headerText="رقم الطلب">
+                            <p:cellEditor>
+                                <f:facet name="output"> <h:outputText value="#{resign.id}" /></f:facet>
+                                <f:facet name="input"> <h:inputText value="#{resign.id}" /></f:facet>
+
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column headerText="المسؤول عن الطلب">
+                            <p:cellEditor>
+                                <f:facet name="output"> <h:outputText value="#{resign.userID}" /></f:facet>
+                                <f:facet name="input"> <h:inputText value="#{resign.userID}" /></f:facet>
+
+                            </p:cellEditor>
+                        </p:column>
+
+
+                        <p:column headerText="الملاحظات">
+                            <p:cellEditor>
+                                <f:facet name="output"> <h:outputText value="#{resign.notes}" /></f:facet>
+                                <f:facet name="input"> <h:inputText value="#{resign.notes}" /></f:facet>
+
+                            </p:cellEditor>
+                        </p:column>
+
+
+
+                    </p:dataTable>
+
+
+                </p:panel>
+
+
+                <h:form id='resignf'>
+                    <p:dialog id='res' header="طلب استقالة" widgetVar="resign" minHeight="40">
+
+                        <h:outputText value="ادخل معلومات الموظف" />
+                        <p:panelGrid  columns="2">
+
+                            <p:outputLabel value="اسم الموظف" /> 
+                            <p:inputText value="#{controller.resignName}" required="true" requiredMessage="حقل اسم الموظف اجباري" />
+
+                            <p:outputLabel value="الرقم الوظيفي" /> 
+                            <p:inputText value="#{controller.resignEmployeNum}" required="true" requiredMessage="حقل الرقم الوظيفي اجباري" />
+
+                            <p:outputLabel value="رقم بطاقة الاحوال" /> 
+                            <p:inputText value="#{controller.resignNationalIDNum}" required="true" requiredMessage="حقل بطاقة الاحوال اجباري" />
+
+                            <p:outputLabel value="الملاحظات" /> 
+                            <p:inputText value="#{controller.resignNotes}" required="true" requiredMessage="حقل الملاحظات اجباري ويجب عليك كتابة الاسباب والا سوف يتم استرجاع الطلب" />
+
+                            <p:outputLabel for="AssignUser" value="User" /> 
+
+                            <p:selectOneMenu id="AssignUser"  value="#{controller.assignUser}" style="width:150px" converter="UConverter">
+                                <f:selectItems value="#{controller.usersList}"  var="user" itemLabel="#{user.username}"/>
+
+
+
+                            </p:selectOneMenu >
+
+
+
+
+
+                            <p:commandButton value="ارسال طلب الاستقالة" action="#{controller.createResignRequest()}" onclick="PF('resign').hide();" update="@all"/>
+
+                        </p:panelGrid>
+
+
+                    </p:dialog>
+                </h:form>
+
+
+                <h:form id='monf'>
+                    <p:dialog id='mon' header="طلب مالي" widgetVar="money" minHeight="40">
+
+                        <h:outputText value="ادخل معلومات الطلب" />
+                        <p:panelGrid  columns="2">
+
+                            <p:outputLabel value="اسم الموظف" /> 
+                            <p:inputText value="#{controller.resignName}" required="true" requiredMessage="حقل اسم الموظف اجباري" />
+
+                            <p:outputLabel value="الرقم الوظيفي" /> 
+                            <p:inputText value="#{controller.resignEmployeNum}" required="true" requiredMessage="حقل الرقم الوظيفي اجباري" />
+
+                            <p:outputLabel value="رقم بطاقة الاحوال" /> 
+                            <p:inputText value="#{controller.resignNationalIDNum}" required="true" requiredMessage="حقل بطاقة الاحوال اجباري" />
+
+                            <p:outputLabel value="اسباب الطلب" /> 
+                            <p:inputText value="#{controller.resignNationalIDNum}" required="true" requiredMessage="حقل الملاحظات اجباري ويجب عليك كتابة الاسباب والا سوف يتم استرجاع الطلب" />
+
+
+
+                            <p:commandButton value="ارسال الطلب" action="#{controller.createResignRequest()}" oncomplete="PF('money').hide();" update="@all"/>
+
+
+                        </p:panelGrid>
+
+
+                    </p:dialog>
+                </h:form>
+
+                <h:form id='vacf'>
+
+                    <p:dialog id='vac' header="اجازة" widgetVar="vacation" minHeight="40" >
+
+                        <h:outputText value="ادخل معلومات الطلب" />
+                        <p:panelGrid  columns="2">
+
+                            <p:outputLabel value="اسم الموظف" /> 
+                            <p:inputText value="#{controller.resignName}" required="true" requiredMessage="حقل اسم الموظف اجباري" />
+
+                            <p:outputLabel value="الرقم الوظيفي" /> 
+                            <p:inputText value="#{controller.resignEmployeNum}" required="true" requiredMessage="حقل الرقم الوظيفي اجباري" />
+
+                            <p:outputLabel value="رقم بطاقة الاحوال" /> 
+                            <p:inputText value="#{controller.resignNationalIDNum}" required="true" requiredMessage="حقل بطاقة الاحوال اجباري" />
+
+                            <p:outputLabel value="اسباب الطلب" /> 
+                            <p:inputText value="#{controller.resignNationalIDNum}" required="true" requiredMessage="حقل الملاحظات اجباري ويجب عليك كتابة الاسباب والا سوف يتم استرجاع الطلب" />
+
+                            <p:outputLabel style="color: red;" value="تنويه اذا لم يكن لديك رصيد اجازة سوف يتم رفض طلبك تلقائيا بعد ساعة من تقديم الطلب" /> 
+
+                            <p:commandButton value="ارسال الطلب" action="#{controller.createResignRequest()}" oncomplete="PF('vacation').hide();" update="@all"/>
+
+                        </p:panelGrid>
+
+
+                    </p:dialog>
+
+                </h:form>
+
+
+            </h:form>
+
+            <p:outputLabel  style="color:white; position:  absolute; size: 100px" rendered="#{controller.type !=0}" value="خظأ"/>
+        </h:body>
+
+
+
+
+    </ui:define>
+
+</ui:composition>

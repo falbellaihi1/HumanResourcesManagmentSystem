@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      >
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet name="./css/default.css"/>
+        <h:outputStylesheet name="./css/cssLayout.css"/>
+        <title>ITCM HRMS</title>
+    </h:head>
+
+    <h:body>
+
+        <div id="top" style="background-color:#006666; height:20%; border:  #ff6600; border-color:  #ff6600">
+            <ui:insert name="topdef" ><p:outputPanel style=" color: white; font-size:40px; font-weight: bold;  direction: rtl">
+                    برنامج  آي تي سي ام لأدارة الموارد البشرية </p:outputPanel>
+                <p:outputLabel style="color:white; font-size: 15px; direction: rtl; float: right;" value=" قسم نظم المعلومات والتطوير"/></ui:insert>
+        </div>
+
+        <div id="content"  style="text-align: center; background-color:white; vertical-align: middle; height:90%;">
+            <ui:insert name="content">Content</ui:insert>
+        </div>
+
+
+
+        <div id="bottom" style="background-color: #006666; height:10%; border:  #ff6600;">
+            <ui:insert name="bottomdef"><p:outputLabel style="color:white; font-size: 15px;" value="Copyright © 2015 ITCM"/> </ui:insert>
+        </div>
+    </h:body>
+
+</html>
+

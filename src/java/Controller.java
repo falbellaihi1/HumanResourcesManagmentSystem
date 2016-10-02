@@ -4,18 +4,20 @@
  * and open the template in the editor.
  */
 
-import EntityBeans.Labels;
-import EntityBeans.Plants;
 import EntityBeans.ResignationRequest;
-import EntityBeans.Tasks;
+
 import EntityBeans.Users;
-import EntityBeans.WorkSchedule;
+import EntityBeans.Worker;
+import com.mysql.jdbc.Connection;
+import java.io.FileNotFoundException;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,11 +32,20 @@ import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
 import org.primefaces.event.FileUploadEvent;
-import query.LabelsController;
-import query.PlantsController;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import query.ResignationRequestController;
-import query.TasksController;
+
 import query.UsersController;
+import query.WorkerController;
 import query.exceptions.IllegalOrphanException;
 import query.exceptions.NonexistentEntityException;
 
@@ -46,36 +57,23 @@ import query.exceptions.NonexistentEntityException;
 @SessionScoped
 public class Controller {
 
-    private String username;
-    private String password;
-    private int type = -10;
-    private Plants selectedPlant;
-    private long userID;
-    private Users fusername;
+    private String username; // variable to hold username input for log in check
+    private String password;// variable to hold password input for log in check
+    private int type = -10; // variable to check user type hence (manager, or other)
 
-    private Tasks tasks = new Tasks();
+    private long userID; // variable to hold UID
+    private Users fusername;
 
     private UsersController uController = new UsersController();
     private List<Users> usersList;
-    private List<Plants> plantList;
-    private List<Tasks> tasksList;
-    private TasksController tController = new TasksController();
-    private List<WorkSchedule> workList;
-    private List<Labels> labelList;
-    private LabelsController lController = new LabelsController();
-    /* below might not be used yet*/
 
-    private List<Plants> result = new LinkedList();
-    private List<Users> userresult = new LinkedList();
-    private String a;//a search variable for the plants
-    private String SU; //A search variable for the users
-    private List<Tasks> wtask = new LinkedList();
-    private PlantsController pController = new PlantsController();
+    private List<Users> userresult = new LinkedList(); // list used to hold user search results
+
+    private String SU; // variable that is used to hold the input and search for it in a list hence (userresult list above)
 
     /* Request to resign*/
-    private List<ResignationRequest> resignList;
-    private ResignationRequestController rController = new ResignationRequestController();
-
+    private List<ResignationRequest> resignList; // resign list
+    private ResignationRequestController rController = new ResignationRequestController(); // resign controller
     private String resignName;
     private String resignEmployeNum;
     private String resignNationalIDNum;
@@ -83,48 +81,191 @@ public class Controller {
     private int AutoAssignToIDNUM;
 
     /* end of request to resign*/
-    private String WaterAmount;
-    private Date WaterTime;
-    private String FertilizerAmount;
-    private Date StartDate;
-    private Date ExpectedEndDate;
-    private String OtherNotes;
+ /* Worker information : Government affairs and legal infromation for international workers */
+    private List<Worker> workerList;
+    private WorkerController wController = new WorkerController();
 
-    private String NewUsername;
-    private String NewPassword;
-    private int NewType;
-    private String NewEmail;
-    private String NameOfUser;
-    private String PictureID = "Unknown";
-    private String PhoneNumber;
-    private String Employee_Num;
-    private int Permission_times;
-    private String Comments;
-    private int Vacation_Balance;
-    private String Salary;
+    /*End of Worker information :Government and legal infromation for international workers */
+    /// New User Variables
+    private String NewUsername; // variable to create new user name for new users
+    private String NewPassword; // variable to hold password for new user
+    private int NewType; // variable to hold the type of the new user
+    private String NewEmail; // variable to hold the email of the new user
+    private String NameOfUser; // variable to hold the legal name of the user
+    private String PictureID = "Unknown"; // variable to hold the directory of the picture of the user
+    private String PhoneNumber; // variable to hold the phone number of the user
+    private String Employee_Num; // variable to hold the employee number of the user
+    private int Permission_times; // variable to hold the times the user (employee has been excussed to leave things like sick leave or whatever)
+    private String Comments; // variable to hold comment about the new user (employee)
+    private int Vacation_Balance; // variable to hold the vacation balance for the user (employee)
+    private String Salary; // variable to hold the user (employee) salary
+// end of new user Variables
 
-    private String newGen;
-    private String newSpec;
-    private String NewPic;
-    private String newTableN;
-    private String newTableP;
+    //unsure variables
     private String newOtherN;
     private Users AssignUser;
-    private Tasks AssignTask;
-    private Users TaskToUser;
+
     private String ForgotEmail;
     private String ForUser;
+
     private String returnPass;
+
     private Users SelectedUser;
-    private Integer CurrentUserID;
-    
+
+    private Integer CurrentUID;
+
     private Users EditAssignUser;
 
+    //end of unsure variables
+    /* begain create new worker*/
+    private String newWorkerName; // variable to hold the worker name
+    private String newNationality; // variable to hold the worker nationality
+    private String newResidenceCardNumber; // string to hold the resdence card number
+    private String newPassportNumber; // string to hold the passport number of the worker
+    private String newBankAccountNumber;  // string to hold the bank account number of the new worker
+    private Date newResidenceCardExpiry; // variable to hold expiry date of the worker
+    private Date newPassportExpiry;// variable to hold the passport expiry date 
+    private String newPassportPic = "Unknown";// passport picture
+    private String newResidencyCardPicture = "Unknown";//variable to hold the residency card picture path
+    private String newWorkerPicture = "Unknown";// variable to hold the path of the worker pic 
+    private String newOtherAttachments = "Unknown";// variable holds other attachments path
+    /* end of new worker*/
+
+ /*
+    Begin worker updates comments and warnings
+     */
+    private String WarnWorkerUpdatesCommentPic;
+    private String WarnWorkerUpdatesCommentCardPic;
+    private String WarnWorkerUpdatesCommentPassportPic;
+    private String WarnWorkerUpdatesCommentOtherAttachment;
+
+
+    /*Eend of worker updates and warnings*/
+ /* Profile variables */
+    private int ProfileWorkerID; // varible to get worker ID number to set information in profile based on clicked worker
+    private String ProfileWorkerName; // variable to hold the worker name in profile
+    private String ProfileNationality; // variable to hold the worker nationality in profile
+    private String ProfileResidenceCardNumber; // string to hold the resdence card number in profile
+    private String ProfilePassportNumber; // string to hold the passport number of the worker in profile
+    private String ProfileBankAccountNumber;  // string to hold the bank account number of the new worker in profile
+    private Date ProfileResidenceCardExpiry; // variable to hold expiry date of the worker in profile
+    private Date ProfilePassportExpiry;// variable to hold the passport expiry date in profile
+    private String ProfilePassportPic = "Unknown";// passport picture in profile
+    private String ProfileResidencyCardPicture = "Unknown";//variable to hold the residency card picture path in profile
+    private String ProfileWorkerPicture = "Unknown";// variable to hold the path of the worker pic  in profile
+    private String ProfileOtherAttachments = "Unknown";// variable holds other attachments path in profile
+
+    // private List<Worker> workerProfileList = new LinkedList(); // list used to hold user search results
+    /* end of profile varibles */
     /**
      * Creates a new instance of Controller
      */
     public Controller() {
 
+    }
+
+    public int getProfileWorkerID() {
+        return ProfileWorkerID;
+    }
+
+    public void setProfileWorkerID(int ProfileWorkerID) {
+        this.ProfileWorkerID = ProfileWorkerID;
+    }
+
+    public String getProfileWorkerName() {
+        return ProfileWorkerName;
+    }
+
+    public void setProfileWorkerName(String ProfileWorkerName) {
+        this.ProfileWorkerName = ProfileWorkerName;
+    }
+
+    public String getProfileNationality() {
+        return ProfileNationality;
+    }
+
+    public void setProfileNationality(String ProfileNationality) {
+        this.ProfileNationality = ProfileNationality;
+    }
+
+    public String getProfileResidenceCardNumber() {
+        return ProfileResidenceCardNumber;
+    }
+
+    public void setProfileResidenceCardNumber(String ProfileResidenceCardNumber) {
+        this.ProfileResidenceCardNumber = ProfileResidenceCardNumber;
+    }
+
+    public String getProfilePassportNumber() {
+        return ProfilePassportNumber;
+    }
+
+    public void setProfilePassportNumber(String ProfilePassportNumber) {
+        this.ProfilePassportNumber = ProfilePassportNumber;
+    }
+
+    public String getProfileBankAccountNumber() {
+        return ProfileBankAccountNumber;
+    }
+
+    public void setProfileBankAccountNumber(String ProfileBankAccountNumber) {
+        this.ProfileBankAccountNumber = ProfileBankAccountNumber;
+    }
+
+    public Date getProfileResidenceCardExpiry() {
+        return ProfileResidenceCardExpiry;
+    }
+
+    public void setProfileResidenceCardExpiry(Date ProfileResidenceCardExpiry) {
+        this.ProfileResidenceCardExpiry = ProfileResidenceCardExpiry;
+    }
+
+    public Date getProfilePassportExpiry() {
+        return ProfilePassportExpiry;
+    }
+
+    public void setProfilePassportExpiry(Date ProfilePassportExpiry) {
+        this.ProfilePassportExpiry = ProfilePassportExpiry;
+    }
+
+    public String getProfilePassportPic() {
+        return ProfilePassportPic;
+    }
+
+    public void setProfilePassportPic(String ProfilePassportPic) {
+        this.ProfilePassportPic = ProfilePassportPic;
+    }
+
+    public String getProfileResidencyCardPicture() {
+        return ProfileResidencyCardPicture;
+    }
+
+    public void setProfileResidencyCardPicture(String ProfileResidencyCardPicture) {
+        this.ProfileResidencyCardPicture = ProfileResidencyCardPicture;
+    }
+
+    public String getProfileWorkerPicture() {
+        return ProfileWorkerPicture;
+    }
+
+    public void setProfileWorkerPicture(String ProfileWorkerPicture) {
+        this.ProfileWorkerPicture = ProfileWorkerPicture;
+    }
+
+    public String getProfileOtherAttachments() {
+        return ProfileOtherAttachments;
+    }
+
+    public void setProfileOtherAttachments(String ProfileOtherAttachments) {
+        this.ProfileOtherAttachments = ProfileOtherAttachments;
+    }
+
+    public List<Worker> getWorkerList() {
+        return workerList;
+    }
+
+    public void setWorkerList(List<Worker> workerList) {
+        this.workerList = workerList;
     }
 
     public Users getEditAssignUser() {
@@ -135,23 +276,12 @@ public class Controller {
         this.EditAssignUser = EditAssignUser;
     }
 
-    
-    
-    
-    public Integer getcurrentUserID() {
-        return CurrentUserID;
+    public Integer getCurrentUID() {
+        return CurrentUID;
     }
 
-    public void setcurrentUserID(Integer CurrentUserID) {
-        this.CurrentUserID = CurrentUserID;
-    }
-
-    public Tasks getTasks() {
-        return tasks;
-    }
-
-    public void setTasks(Tasks tasks) {
-        this.tasks = tasks;
+    public void setCurrentUID(Integer CurrentUID) {
+        this.CurrentUID = CurrentUID;
     }
 
     public List<ResignationRequest> getResignList() {
@@ -200,14 +330,6 @@ public class Controller {
 
     public void setAutoAssignToIDNUM(int AutoAssignToIDNUM) {
         this.AutoAssignToIDNUM = AutoAssignToIDNUM;
-    }
-
-    public List<Tasks> getWtask() {
-        return wtask;
-    }
-
-    public void setWtask(List<Tasks> wtask) {
-        this.wtask = wtask;
     }
 
     public String getEmployee_Num() {
@@ -274,6 +396,38 @@ public class Controller {
         this.SelectedUser = SelectedUser;
     }
 
+    public String getWarnWorkerUpdatesCommentPic() {
+        return WarnWorkerUpdatesCommentPic;
+    }
+
+    public void setWarnWorkerUpdatesCommentPic(String WarnWorkerUpdatesCommentPic) {
+        this.WarnWorkerUpdatesCommentPic = WarnWorkerUpdatesCommentPic;
+    }
+
+    public String getWarnWorkerUpdatesCommentCardPic() {
+        return WarnWorkerUpdatesCommentCardPic;
+    }
+
+    public String getWarnWorkerUpdatesCommentOtherAttachment() {
+        return WarnWorkerUpdatesCommentOtherAttachment;
+    }
+
+    public void setWarnWorkerUpdatesCommentOtherAttachment(String WarnWorkerUpdatesCommentOtherAttachment) {
+        this.WarnWorkerUpdatesCommentOtherAttachment = WarnWorkerUpdatesCommentOtherAttachment;
+    }
+
+    public void setWarnWorkerUpdatesCommentCardPic(String WarnWorkerUpdatesCommentCardPic) {
+        this.WarnWorkerUpdatesCommentCardPic = WarnWorkerUpdatesCommentCardPic;
+    }
+
+    public String getWarnWorkerUpdatesCommentPassportPic() {
+        return WarnWorkerUpdatesCommentPassportPic;
+    }
+
+    public void setWarnWorkerUpdatesCommentPassportPic(String WarnWorkerUpdatesCommentPassportPic) {
+        this.WarnWorkerUpdatesCommentPassportPic = WarnWorkerUpdatesCommentPassportPic;
+    }
+
     public void handleFileUpload(FileUploadEvent event) {
         FacesMessage message = new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");
 
@@ -300,6 +454,55 @@ public class Controller {
         SelectedUser.setPictureID("http://localhost/" + file.getFileName());
         System.out.println(SelectedUser.getPictureID());
 
+    }
+
+    public void handleExcleUpload() throws ClassNotFoundException, SQLException, FileNotFoundException, IOException {
+
+        Class.forName("com.mysql.jdbc.Driver");
+        Connection connect = (Connection) DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/test",
+                "root",
+                "root"
+        );
+        Statement statement = connect.createStatement();
+        ResultSet resultSet = statement
+                .executeQuery("select * from emp_tbl");
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        XSSFSheet spreadsheet = workbook
+                .createSheet("employe db");
+        XSSFRow row = spreadsheet.createRow(1);
+        XSSFCell cell;
+        cell = row.createCell(1);
+        cell.setCellValue("EMP ID");
+        cell = row.createCell(2);
+        cell.setCellValue("EMP NAME");
+        cell = row.createCell(3);
+        cell.setCellValue("DEG");
+        cell = row.createCell(4);
+        cell.setCellValue("SALARY");
+        cell = row.createCell(5);
+        cell.setCellValue("DEPT");
+        int i = 2;
+        while (resultSet.next()) {
+            row = spreadsheet.createRow(i);
+            cell = row.createCell(1);
+            cell.setCellValue(resultSet.getInt("eid"));
+            cell = row.createCell(2);
+            cell.setCellValue(resultSet.getString("ename"));
+            cell = row.createCell(3);
+            cell.setCellValue(resultSet.getString("deg"));
+            cell = row.createCell(4);
+            cell.setCellValue(resultSet.getString("salary"));
+            cell = row.createCell(5);
+            cell.setCellValue(resultSet.getString("dept"));
+            i++;
+        }
+        FileOutputStream out = new FileOutputStream(
+                new File("exceldatabase.xlsx"));
+        workbook.write(out);
+        out.close();
+        System.out.println(
+                "exceldatabase.xlsx written successfully");
     }
 
     public void h() {
@@ -330,22 +533,6 @@ public class Controller {
             System.out.println("Email not matched with user record");
         }
     } //forgot password function
-
-    public Tasks getAssignTask() {
-        return AssignTask;
-    }
-
-    public void setAssignTask(Tasks AssignTask) {
-        this.AssignTask = AssignTask;
-    }
-
-    public Users getTaskToUser() {
-        return TaskToUser;
-    }
-
-    public void setTaskToUser(Users TaskToUser) {
-        this.TaskToUser = TaskToUser;
-    }
 
     public Users getFusername() {
         return fusername;
@@ -381,94 +568,18 @@ public class Controller {
 
     public void searchUser() {
 
-        //Plants p = new Plants();
         System.out.println("searching ...");
 
-        result.clear();
+        userresult.clear();
         for (Users str : usersList) {
             if (str.toString().contains(SU)) {
                 System.out.println(str);
                 userresult.add(str);
-                //    S = str.getGenus();
-                //  return S;
+
             }
         }
 
         //return "Could not find plant";
-    }
-
-    public void searchPant() {
-
-        //Plants p = new Plants();
-        System.out.println("searching ...");
-
-        result.clear();
-        for (Plants str : plantList) {
-            if (str.toString().contains(a)) {
-                System.out.println(str);
-                result.add(str);
-                //    S = str.getGenus();
-                //  return S;
-            }
-        }
-
-        //return "Could not find plant";
-    }
-
-    public List<Plants> getResult() {
-        return result;
-    }
-
-    public void setResult(List<Plants> result) {
-        this.result = result;
-    }
-
-    public String getA() {
-        return a;
-    }
-
-    public void setA(String a) {
-        this.a = a;
-    }
-
-    public String getNewGen() {
-        return newGen;
-    }
-
-    public void setNewGen(String newGen) {
-        this.newGen = newGen;
-    }
-
-    public String getNewSpec() {
-        return newSpec;
-    }
-
-    public void setNewSpec(String newSpec) {
-        this.newSpec = newSpec;
-    }
-
-    public String getNewPic() {
-        return NewPic;
-    }
-
-    public void setNewPic(String NewPic) {
-        this.NewPic = NewPic;
-    }
-
-    public String getNewTableN() {
-        return newTableN;
-    }
-
-    public void setNewTableN(String newTableN) {
-        this.newTableN = newTableN;
-    }
-
-    public String getNewTableP() {
-        return newTableP;
-    }
-
-    public void setNewTableP(String newTableP) {
-        this.newTableP = newTableP;
     }
 
     public String getNewOtherN() {
@@ -536,41 +647,97 @@ public class Controller {
         this.NewEmail = NewEmail;
     }
 
-    public List<WorkSchedule> getWorkList() {
-        return workList;
+    public String getNewWorkerName() {
+        return newWorkerName;
     }
 
-    public void setWorkList(List<WorkSchedule> workList) {
-        this.workList = workList;
+    public void setNewWorkerName(String newWorkerName) {
+        this.newWorkerName = newWorkerName;
     }
 
-    public List<Labels> getLabelList() {
-        return labelList;
+    public String getNewNationality() {
+        return newNationality;
     }
 
-    public void setLabelList(List<Labels> labelList) {
-        this.labelList = labelList;
+    public void setNewNationality(String newNationality) {
+        this.newNationality = newNationality;
+    }
+
+    public String getNewResidenceCardNumber() {
+        return newResidenceCardNumber;
+    }
+
+    public void setNewResidenceCardNumber(String newResidenceCardNumber) {
+        this.newResidenceCardNumber = newResidenceCardNumber;
+    }
+
+    public String getNewPassportNumber() {
+        return newPassportNumber;
+    }
+
+    public void setNewPassportNumber(String newPassportNumber) {
+        this.newPassportNumber = newPassportNumber;
+    }
+
+    public String getNewBankAccountNumber() {
+        return newBankAccountNumber;
+    }
+
+    public void setNewBankAccountNumber(String newBankAccountNumber) {
+        this.newBankAccountNumber = newBankAccountNumber;
+    }
+
+    public Date getNewResidenceCardExpiry() {
+        return newResidenceCardExpiry;
+    }
+
+    public void setNewResidenceCardExpiry(Date newResidenceCardExpiry) {
+        this.newResidenceCardExpiry = newResidenceCardExpiry;
+    }
+
+    public Date getNewPassportExpiry() {
+        return newPassportExpiry;
+    }
+
+    public void setNewPassportExpiry(Date newPassportExpiry) {
+        this.newPassportExpiry = newPassportExpiry;
+    }
+
+    public String getNewPassportPic() {
+        return newPassportPic;
+    }
+
+    public void setNewPassportPic(String newPassportPic) {
+        this.newPassportPic = newPassportPic;
+    }
+
+    public String getNewResidencyCardPicture() {
+        return newResidencyCardPicture;
+    }
+
+    public void setNewResidencyCardPicture(String newResidencyCardPicture) {
+        this.newResidencyCardPicture = newResidencyCardPicture;
+    }
+
+    public String getNewWorkerPicture() {
+        return newWorkerPicture;
+    }
+
+    public void setNewWorkerPicture(String newWorkerPicture) {
+        this.newWorkerPicture = newWorkerPicture;
+    }
+
+    public String getNewOtherAttachments() {
+        return newOtherAttachments;
+    }
+
+    public void setNewOtherAttachments(String newOtherAttachments) {
+        this.newOtherAttachments = newOtherAttachments;
     }
 
     public void getUsernameByID(int ID, int index) {
 
         //Here where to get UID and return the username;
-    }
-
-    public List<Tasks> getTasksList() {
-        return tasksList;
-    }
-
-    public void setTasksList(List<Tasks> tasksList) {
-        this.tasksList = tasksList;
-    }
-
-    public List<Plants> getPlantList() {
-        return plantList;
-    }
-
-    public void setPlantList(List<Plants> plantList) {
-        this.plantList = plantList;
     }
 
     public void removePlant(int ID, int index) {
@@ -586,28 +753,15 @@ public class Controller {
         }
     }
 
-    public void removeTask(int ID, int index) {
-        try {
-            System.out.println("remove task remove plant rempppppppfijdsjdkjss");
-
-            tController.destroy(ID);
-            tasksList.remove(index);
-
-            //   return ID;
-        } catch (NonexistentEntityException ex) {
-            ex.printStackTrace();
-        }
-    }
-
     public void removeWork(int ID, int index) {
 
     }
-    
-    public void removeResign(int ID, int index){
-        
+
+    public void removeResign(int ID, int index) {
+
         System.out.println("remove resign" + ID);
-         try {
-             System.out.println("remove resign");
+        try {
+            System.out.println("remove resign");
             rController.destroy(ID);
             resignList.remove(index);
         } catch (NonexistentEntityException ex) {
@@ -621,62 +775,6 @@ public class Controller {
 
     public void setNewUsername(String NewUser) {
         this.NewUsername = NewUser;
-    }
-
-    public String getWaterAmount() {
-        return WaterAmount;
-    }
-
-    public void setWaterAmount(String WaterAmount) {
-        this.WaterAmount = WaterAmount;
-    }
-
-    public Date getWaterTime() {
-        return WaterTime;
-    }
-
-    public void setWaterTime(Date WaterTime) {
-        this.WaterTime = WaterTime;
-    }
-
-    public String getFertilizerAmount() {
-        return FertilizerAmount;
-    }
-
-    public void setFertilizerAmount(String FertilizerAmount) {
-        this.FertilizerAmount = FertilizerAmount;
-    }
-
-    public Date getStartDate() {
-        return StartDate;
-    }
-
-    public void setStartDate(Date StartDate) {
-        this.StartDate = StartDate;
-    }
-
-    public Date getExpectedEndDate() {
-        return ExpectedEndDate;
-    }
-
-    public void setExpectedEndDate(Date ExpectedEndDate) {
-        this.ExpectedEndDate = ExpectedEndDate;
-    }
-
-    public String getOtherNotes() {
-        return OtherNotes;
-    }
-
-    public void setOtherNotes(String OtherNotes) {
-        this.OtherNotes = OtherNotes;
-    }
-
-    public Plants getSelectedPlant() {
-        return selectedPlant;
-    }
-
-    public void setSelectedPlant(Plants selectedPlant) {
-        this.selectedPlant = selectedPlant;
     }
 
     public void createUser() {
@@ -699,7 +797,6 @@ public class Controller {
 
             uController.create(newUser);
 
-            tasksList = tController.findTasksEntities(); // retrives all the tasks from the database
             usersList = uController.findUsersEntities(); //retrieves all the users from the database
 
         } catch (Exception ex) {
@@ -708,12 +805,63 @@ public class Controller {
 
     }
 
-    /*    private String resignName;
-    private String resignEmployeNum;
-    private String resignNationalIDNum;
-    private String Notes;
-    private int AutoAssignToIDNUM;
-    (ResignationRequest)*/
+    public void createProfile(Worker w) {
+
+        System.out.println(w.getWorkerName());
+
+    }
+
+    public void createWorker() { //creates new worker
+        workerList = wController.findWorkerEntities();
+        /*
+        creates new worker
+         */
+        Worker newWorker = new Worker();
+        newWorker.setWorkerName(newWorkerName);
+        newWorker.setNationality(newNationality);
+        newWorker.setResidenceCardNumber(newResidenceCardNumber);
+        newWorker.setPassportNumber(newPassportNumber);
+        newWorker.setResidenceCardExpiry(newResidenceCardExpiry);
+        newWorker.setPassportExpiry(newPassportExpiry);
+        newWorker.setBankAccountNumber(newBankAccountNumber);
+        newWorker.setPassportPicture(newPassportPic);
+        newWorker.setResidencyCardPicture(newResidencyCardPicture);
+        newWorker.setOtherAttachment(newOtherAttachments);
+        newWorker.setWorkerPicture(newWorkerPicture);
+
+        for (Worker s : workerList) { // find if there is dublicated worker
+            // if (s.toString().) {
+            //  System.out.println(newWorkerName + "  ;;Already in system");
+            //}
+            // else {
+            //   System.out.println("  -> " + s.toString());
+            // }
+        }
+
+        wController.create(newWorker);
+
+        workerList = wController.findWorkerEntities();
+
+    }
+
+    public void createWorkerProfile(Worker workerInfo, int index) {
+
+        System.out.println(" " + workerInfo.getId() + " " + index);
+        ProfileWorkerID = workerInfo.getId();
+        ProfileWorkerName = workerInfo.getWorkerName();
+        ProfileNationality = workerInfo.getNationality();
+        ProfileResidenceCardNumber = workerInfo.getResidenceCardNumber();
+        ProfilePassportNumber = workerInfo.getPassportNumber();
+        ProfileBankAccountNumber = workerInfo.getBankAccountNumber();
+        ProfileResidenceCardExpiry = workerInfo.getResidenceCardExpiry();
+        ProfilePassportExpiry = workerInfo.getPassportExpiry();
+        ProfilePassportPic = workerInfo.getPassportPicture();
+        ProfileResidencyCardPicture = workerInfo.getResidencyCardPicture();
+        ProfileWorkerPicture = workerInfo.getWorkerPicture();
+        ProfileOtherAttachments = workerInfo.getOtherAttachment();
+
+    }
+
     public void createResignRequest() {
 
         System.out.println("createResignRequest");
@@ -722,11 +870,11 @@ public class Controller {
         newResign.setName(resignName);
         newResign.setEmployeeNum(resignEmployeNum);
         newResign.setNationalID(resignNationalIDNum);
-        
+
         newResign.setNotes(ResignNotes);
 
         newResign.setUserID(AssignUser);
-        
+
         rController.create(newResign);
         resignList = rController.findResignationRequestEntities(); //retrieves all the resigns from the database
 
@@ -740,83 +888,6 @@ public class Controller {
         this.returnPass = returnPass;
     }
 
-    public void createPlant() {
-        System.out.println("creating plant!");
-        Plants newPlant = new Plants();
-        newPlant.setGenus(newGen);
-        newPlant.setSpecies(newSpec);
-        newPlant.setPictureID(NewPic);
-        newPlant.setOtherNotes(newOtherN);
-        newPlant.setTableNumber(newTableN);
-        newPlant.setTablePosition(newTableP);
-        newPlant.setUserID(AssignUser);
-
-        tasksList = tController.findTasksEntities(); // retrives all the tasks from the database
-        usersList = uController.findUsersEntities(); //retrieves all the users from the database
-
-    }
-
-    public void createTask() {
-        try {
-            System.out.println("creating task!");
-
-            tasks.setEndDate(ExpectedEndDate);
-            tasks.setFertilizer(FertilizerAmount);
-            tasks.setOtherNotes(OtherNotes);
-            tasks.setStartDate(StartDate);
-            tasks.setWaterAmount(WaterAmount);
-            tasks.setWaterTime(WaterTime);
-            tasks.setPlantID(selectedPlant);
-            //tasks.setWorkSchedule(workSchedule);
-            tController.create(tasks);
-
-            tasksList = tController.findTasksEntities(); // retrives all the tasks from the database
-            usersList = uController.findUsersEntities(); //retrieves all the users from the database
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-    }
-
-    public void createWork() {
-
-        WorkSchedule work = new WorkSchedule();
-
-        for (Tasks task : tasksList) {
-            if (task.toString().contains((CharSequence) AssignTask)) {
-                System.out.println(task);
-                wtask.add(task);
-                //    S = str.getGenus();
-                //  return S;
-            }
-        }
-        //work.setComments();
-        work.setDate(StartDate);
-        work.setTimeOut(StartDate);
-        work.setTasks(AssignTask);
-
-        //System.out.println("this is " + );
-        work.setUserID(TaskToUser);
-
-    }
-
-    public void editWork(WorkSchedule w) {
-
-    }
-
-    public void editTask(Tasks t) {
-        try {
-            tController.edit(t);
-        } catch (Exception ex) {
-            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    public void editPlant(Plants p) {
-
-    }
-
     public void editUser(Users u) {
 
         try {
@@ -824,22 +895,26 @@ public class Controller {
 
             // Plants plant = pController.findPlants(ID);
             uController.edit(u);
+
         } catch (Exception ex) {
-            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Controller.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
 
     }
 
     public void editRequestStep(ResignationRequest r) {
-        
-        System.out.println("Edit resign " + EditAssignUser +"   this is userthig" + r.getName());
-        
+
+        System.out.println("Edit resign " + EditAssignUser + "   this is userthig" + r.getName());
+
         try {
             System.out.println("Edit resign");
             r.setUserID(EditAssignUser);
-            
+            rController.edit(r);
+
         } catch (Exception ex) {
-            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Controller.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
 
     }
@@ -891,13 +966,12 @@ public class Controller {
 
     public String login() {
 
-        tasksList = tController.findTasksEntities(); // retrives all the tasks from the database
         usersList = uController.findUsersEntities(); //retrieves all the users from the database
         resignList = rController.findResignationRequestEntities(); //retrieves all the resigns from the database
-
+        workerList = wController.findWorkerEntities(); // to fetch worker information and insert it into the list
         Users user = uController.login(username, password, type);
 
-        CurrentUserID = user.getId();
+        CurrentUID = user.getId();
 
         System.out.println("\n\n\n test test " + username + " -- " + password + "user id is " + user.getId());
         if (user == null) {
@@ -909,22 +983,41 @@ public class Controller {
             switch (type) {
                 case 0:
 
-                    return "AdminControlPanel.xhtml";
+                    return "ControlPanel.xhtml";
                 case 1:
                     return "StudentControlPanel.xhtml";
                 case 2:
                     return "dontatorHome.xhtml";
 
                 default:
-                    return "AdminControlPanel.xhtml";
+                    return "ControlPanel.xhtml";
             }
 
         }
     }
 
-    public void accessPlantsInfo() {
+    public void WarnWorkerUpdates(Worker workerUpdates) {
 
-        plantList = pController.findPlantsEntities();
+        workerList = wController.findWorkerEntities();
+        System.out.println(wController.findWorker(workerUpdates.getId()).getPassportPicture());
+        if (wController.findWorker(workerUpdates.getId()).getWorkerPicture().equals("Unknown")
+                || wController.findWorker(workerUpdates.getId()).getPassportPicture().equals("Unknown")
+                || wController.findWorker(workerUpdates.getId()).getResidencyCardPicture().equals("Unknown")
+                || wController.findWorker(workerUpdates.getId()).getOtherAttachment().equals("Unknown")) {
+
+            WarnWorkerUpdatesCommentPic = "صورة العامل لم ترفع بعد";
+            WarnWorkerUpdatesCommentCardPic = " صورة بطاقة الأقامة لم ترفع بعد";
+            WarnWorkerUpdatesCommentPassportPic = "صورة الجواز لم ترفع بعد";
+            WarnWorkerUpdatesCommentOtherAttachment = "لم يتم ارفاق مرفقات اخر لهذا العامل ";
+
+        } else {
+
+            WarnWorkerUpdatesCommentPic = "لاتوجد تنبيهات";// notfity the user that everything is okay!
+            WarnWorkerUpdatesCommentCardPic = ""; //clear variable if already uploaded a picture
+            WarnWorkerUpdatesCommentPassportPic = ""; // clear the variable if already uploaded picture
+            WarnWorkerUpdatesCommentOtherAttachment = ""; //clear the variable if already uploaded a picture
+
+        }
 
     }
 
@@ -934,8 +1027,9 @@ public class Controller {
 
     }
 
-    public void accessTasksInfo() {
-        tasksList = tController.findTasksEntities(); // retrives all the tasks from the database
+    public void FetchWorkerInfo() {
+
+        workerList = wController.findWorkerEntities();
 
     }
 

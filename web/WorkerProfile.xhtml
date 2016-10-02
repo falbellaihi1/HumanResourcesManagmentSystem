@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./templates/Template.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <ui:define name="content">
+        <h:body >
+            <h:form  id="hf1" >
+                <p:growl life="5000" />
+
+
+                <p:toolbar>
+                    <f:facet name="left">
+                        <p:button outcome="ControlPanel" value="متابعة الطلبات وسير العمل" icon="ui-icon-home">
+                        </p:button>
+                        <p:commandButton rendered="#{controller.username !=null}"  value="اضافة عامل" icon="ui-icon-squaresmall-plus" onclick="PF('add').show();"/>
+                        <p:commandButton rendered="#{controller.username !=null}" action ="#{controller.logout()}" ajax="true" value="تسجيل الخروج" icon="ui-icon-power"/>
+                        <p:inputText id="text"  required="false" label="text" value="#{controller.SU}"  />
+                        <p:commandButton id="cm" action="#{controller.searchUser()}" value="بحث" icon="ui-icon-search" oncomplete="PF('result').show();"/> 
+
+                    </f:facet>
+                </p:toolbar>
+                <p:separator />
+
+
+
+
+                <p:panelGrid columns="2" style="width: 100%; margin:0 auto;  " styleClass="outerpanelgrid" >
+
+                    <f:facet name="header">
+                        <p:graphicImage name="#{controller.profileWorkerPicture}" />
+                    </f:facet>
+
+                    <h:outputText value="ID:" />
+                    <h:outputText value="#{controller.profileWorkerID}" />
+
+                    <h:outputText value="الاسم" />
+                    <h:outputText value="#{controller.profileWorkerName}" />
+
+                    <h:outputText value="الجنسية" />
+                    <h:outputText value="#{controller.profileNationality}" />
+
+                    <h:outputText value="رقم الأقامة" />
+                    <h:outputText value="#{controller.profileResidenceCardNumber}" />
+
+                    <h:outputText value="رقم الجواز" />
+                    <h:outputText value="#{controller.profilePassportNumber}" />
+
+                    <h:outputText value="تاريخ انتهاء الأقامة" />
+                    <h:outputText value="#{controller.profileResidenceCardExpiry}" />
+                    <h:outputText value="تاريخ انتهاء الجواز" />
+                    <h:outputText value="#{controller.profilePassportExpiry}" />
+
+
+
+                    <h:outputText value="صورة الجواز" />
+                    <p:graphicImage name="#{controller.profilePassportPic}" />
+
+                    <h:outputText value="صورة الأقامة" />
+                    <p:graphicImage name="#{controller.profileResidencyCardPicture}" />
+
+
+                </p:panelGrid>
+
+
+
+
+
+
+            </h:form>
+        </h:body>
+    </ui:define>
+
+</ui:composition>

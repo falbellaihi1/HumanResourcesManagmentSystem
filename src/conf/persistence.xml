@@ -9,6 +9,7 @@
     <class>EntityBeans.Plants</class>
     <class>EntityBeans.Users</class>
     <class>EntityBeans.ResignationRequest</class>
+    <class>EntityBeans.Worker</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/falbella_plant?zeroDateTimeBehavior=convertToNull"/>

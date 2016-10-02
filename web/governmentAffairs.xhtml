@@ -1,0 +1,192 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./templates/Template.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <ui:define name="content">
+        <h:body >
+            <h:form  id="hf1" >
+                <p:growl life="5000" />
+
+
+                <p:toolbar>
+                    <f:facet name="left">
+                        <p:button outcome="ControlPanel" value="متابعة الطلبات وسير العمل" icon="ui-icon-home">
+                        </p:button>
+                        <p:commandButton rendered="#{controller.username !=null}"  value="اضافة عامل" icon="ui-icon-squaresmall-plus" onclick="PF('add').show();"/>
+                        <p:commandButton rendered="#{controller.username !=null}" action ="#{controller.logout()}" ajax="true" value="تسجيل الخروج" icon="ui-icon-power"/>
+                        <p:inputText id="text"  required="false" label="text" value="#{controller.SU}"  />
+                        <p:commandButton id="cm" action="#{controller.searchUser()}" value="بحث" icon="ui-icon-search" oncomplete="PF('result').show();"/> 
+
+
+                    </f:facet>
+
+
+                </p:toolbar>
+
+                <p:separator />
+
+
+                <p:dataTable   tableStyle="width:auto" cellSeparator="true" editMode="cell" editable="true" id="WorkerTable"
+                               var="workerInfo" value="#{controller.workerList}" paginator="true"   
+                               rows="5" rowIndexVar="index"   style=" size: auto">
+
+
+                    <p:column   style="width: 3%" headerText="رقم التعريف">
+
+                        <h:outputText value="#{workerInfo.id}" />
+
+                    </p:column>
+
+
+
+                    <p:column   style="width: 3%" headerText="اسم العامل">
+
+                        <h:outputText value="#{workerInfo.workerName}" />
+
+                    </p:column>
+
+                    <p:column   style="width: 3%" headerText="اسم العامل">
+
+                        <h:outputText value="#{workerInfo.nationality}" />
+
+                    </p:column>
+
+
+                    <p:column   style="width: 3%" headerText="رقم الاقامة">
+
+                        <h:outputText value="#{workerInfo.residenceCardNumber}" />
+
+                    </p:column>
+                    <p:column   style="width: 3%" headerText="رقم الجواز">
+
+                        <h:outputText value="#{workerInfo.passportNumber}" />
+
+                    </p:column>
+                    <p:column   style="width: 3%" headerText="رقم الحساب البنكي">
+
+                        <h:outputText value="#{workerInfo.bankAccountNumber}" />
+
+                    </p:column>
+
+                    <p:column   style="width: 3%" headerText="تاريخ انتهاء الجواز">
+
+                        <h:outputText value="#{workerInfo.passportExpiry}" />
+
+                    </p:column>
+                    <p:column   style="width: 3%" headerText="تاريخ انتهاء الأقامة">
+
+                        <h:outputText value="#{workerInfo.residenceCardExpiry}" />
+
+                    </p:column>
+
+                    <p:column   style="width: 3%" headerText="التنبيهات">
+
+                        <h:outputText value="#{controller.WarnWorkerUpdates(workerInfo)}" />
+                        <h:outputText style=" color:  #D20005" value="#{controller.warnWorkerUpdatesCommentPic}" />
+                        <p:separator />
+                        <h:outputText style=" color:  #D20005" value="#{controller.warnWorkerUpdatesCommentCardPic}" />
+                        <p:separator />
+                        <h:outputText style=" color:  #D20005" value="#{controller.warnWorkerUpdatesCommentPassportPic}" />
+                        <p:separator />
+                        <h:outputText style=" color:  #D20005" value="#{controller.warnWorkerUpdatesCommentOtherAttachment}" />
+                    </p:column>
+
+                    <p:column   style="width: 3%" headerText="">
+
+                        <p:commandButton value="صفحة العامل"
+                                           oncomplete="window.open('WorkerProfile.xhtml')" icon="ui-icon-calendar">
+                            <p:ajax listener="#{controller.createWorkerProfile(workerInfo,index)}" />
+                        </p:commandButton>
+
+                       
+
+                    </p:column>
+
+                </p:dataTable>
+
+
+                <p:dialog header="اظافة موظف جديد" widgetVar="add" minHeight="40">
+
+                    <h:outputText value="ادخل معلومات الموظف" />
+                    <p:panelGrid  columns="2">
+
+
+                        <p:outputLabel value="اسم العامل"/> 
+                        <p:inputText value="#{controller.newWorkerName}" required="true" requiredMessage="حقل الباسوورد اجباري"/>
+
+                        <p:outputLabel value="الجنسية"/> 
+                        <p:inputText value="#{controller.newNationality}" required="true" requiredMessage="حقل الباسوورد اجباري"/>
+
+                        <p:outputLabel value="رقم الأقامة"/> 
+                        <p:inputText value="#{controller.newResidenceCardNumber}"/>
+
+                        <p:outputLabel value="رقم الجواز"/> 
+                        <p:inputText value="#{controller.newPassportNumber}"  required="true" requiredMessage="حقل الايميل اجباري"/>
+
+                        <p:outputLabel value="رقم الحساب البنكي"/> 
+                        <p:inputText value="#{controller.newBankAccountNumber}"  required="true" requiredMessage="حقل الاسم اجباري"/>
+
+                        <p:outputLabel value="تاريخ انتهاءالأقامة" /> 
+                        <p:calendar  value="#{controller.newResidenceCardExpiry}"/>
+
+
+                        <p:outputLabel value="تاريخ انتهاء الجواز" /> 
+                        <p:calendar  value="#{controller.newPassportExpiry}"/>
+
+                        <p:outputLabel value="صورة الجواز" /> 
+
+                        <p:fileUpload fileUploadListener="#{controller.handleFileUpload}"   mode="advanced" dragDropSupport="false"    
+                                      update="@form" sizeLimit="100000"  fileLimit="3" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" >
+                            <f:attribute name="user" value="#{index}" />
+
+                        </p:fileUpload>
+
+
+                        <p:outputLabel value="صورة الأقامة" /> 
+
+                        <p:fileUpload fileUploadListener="#{controller.handleFileUpload}"   mode="advanced" dragDropSupport="false"    
+                                      update="@form" sizeLimit="100000"  fileLimit="3" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" >
+                            <f:attribute name="user" value="#{index}" />
+
+                        </p:fileUpload>
+
+
+                        <p:outputLabel value="صورة العامل" /> 
+
+                        <p:fileUpload fileUploadListener="#{controller.handleFileUpload}"   mode="advanced" dragDropSupport="false"    
+                                      update="@form" sizeLimit="100000"  fileLimit="3" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" >
+                            <f:attribute name="user" value="#{index}" />
+
+                        </p:fileUpload>
+
+
+
+                        <p:outputLabel value="مرفقات اخرى" /> 
+
+                        <p:fileUpload fileUploadListener="#{controller.handleFileUpload}"   mode="advanced" dragDropSupport="false"    
+                                      update="@form" sizeLimit="100000"  fileLimit="3" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" >
+                            <f:attribute name="user" value="#{index}" />
+
+                        </p:fileUpload>
+
+
+                        <p:commandButton value="اتمام التسجيل" action="#{controller.createWorker()}" oncomplete="PF('add').hide();" update="@form"/>
+
+                    </p:panelGrid>
+
+
+                </p:dialog>
+
+
+
+
+
+            </h:form>
+        </h:body>
+    </ui:define>
+
+</ui:composition>

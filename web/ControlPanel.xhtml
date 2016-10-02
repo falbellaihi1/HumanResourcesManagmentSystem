@@ -1,0 +1,196 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="templates/Template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+
+    <ui:define name="content">
+        <h:body style=" height:100%; ">
+            <h:form>     
+                <p:growl id="messages" showDetail="true" />
+
+                <p:toolbar style=" ">
+                    <f:facet name="left" >
+
+                        <p:button  outcome="ControlPanel" value="متابعة الطلبات وسير العمل" icon="ui-icon-home" />
+
+                        <p:button outcome="ManageEmployee" value="الموظفين" icon="ui-icon-person"/>
+
+                        <p:button outcome="workinformation" value="معلومات" icon="ui-icon-gear"/>
+
+                        <p:button outcome="requests" value="رفع طلب جديد" icon="ui-icon-clock"/>
+
+                        <p:button outcome="calender" value="الرواتب" icon="ui-icon-calendar"/>
+
+                        <p:button outcome="governmentAffairs" value="العلاقات الحكومية والعمال" icon="ui-icon-calendar"/>
+                        
+                         <p:button  outcome="Accounting" value="المحاسبة" icon="ui-icon-home" />
+                         
+                         <p:button  outcome="BankAffairs" value="العلاقات البنكية" icon="ui-icon-home" />
+                        <p:commandButton  rendered="#{controller.username !=null}" action ="#{controller.logout()}" ajax="false" value="تسجيل الخروج" icon="ui-icon-power"/>
+
+                    </f:facet>
+                </p:toolbar>
+                <p:separator/>
+
+
+
+
+                <p:outputLabel style=" color:  #006666;">#{controller.username} مرحباَ </p:outputLabel>  
+
+
+
+
+
+
+                <p:panel id="works" header="سير العمل">
+
+                    <p:dataTable  cellSeparator="true" editMode="cell" editable="true" id="TaskTable" var="task" value="#{controller}" paginator="true"    rows="10" rowIndexVar="index" style=" size: auto">
+
+
+                        <p:column headerText="رقم المعاملة">
+
+                            <h:outputText value="" />
+
+                        </p:column>
+
+                        <p:column headerText="تاريخ استلام المعاملة">
+
+
+                            <h:outputText value="" />
+
+
+
+
+                        </p:column>
+
+
+                        <p:column headerText="تاريخ انتهاء المعاملة">
+
+
+                            <h:outputText value="" />
+
+
+
+                        </p:column>
+
+
+
+                        <p:column headerText="نوع المعاملة">
+
+
+                            <h:outputText value="" />
+
+
+
+
+                        </p:column>
+
+
+                        <p:column headerText="المسؤول عن المعاملة">
+
+
+                            <h:outputText value="" />
+
+
+
+
+                        </p:column>
+
+
+                        <p:column headerText="تاريخ اخر تحديث">
+
+
+                            <h:outputText value=""/>
+
+
+                        </p:column>
+
+
+
+                        <p:column headerText="ملاحظات">
+
+                            <h:outputText value="" />
+
+
+
+                        </p:column>
+
+                    </p:dataTable>
+                </p:panel>
+                <p:panel id="requests" header="طلبات الاستقالة">
+                    <p:dataTable cellSeparator="true"  id="PlantsTable" var="resr" value="#{controller.resignList}" paginator="true" rows="10" rowIndexVar="index" rendered="#{resr.userID == controller.currentUID}">
+
+
+                        <p:column headerText="رقم الطلب">
+
+                            <h:outputText value="#{resr.id}" />
+
+                        </p:column>
+
+                        <p:column headerText="رقم الموظف">
+
+
+                            <h:outputText value="#{resr.employeeNum}" />
+
+
+
+                        </p:column>
+
+
+                        <p:column headerText="اسم الموظف">
+
+                            <h:outputText value="#{resr.name}" />
+
+                        </p:column>
+                        <p:column headerText="رقم الموظف">
+
+                            <h:outputText value="#{resr.employeeNum}" />
+
+                        </p:column>
+                        <p:column headerText="رقم بطاقة الاحوال">
+
+                            <h:outputText value="#{resr.nationalID}" />
+
+                        </p:column>
+                        <p:column headerText="ملاحظات الطلب">
+
+                            <h:outputText value="#{resr.notes}" />
+
+                        </p:column>
+
+                        <p:column headerText="مرحلة الطلب">
+
+                            <h:outputText value="#{resr.userID}" />
+
+                        </p:column>
+
+                    </p:dataTable>
+
+                </p:panel>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            </h:form>
+
+
+        </h:body>
+    </ui:define>
+
+
+
+</ui:composition>
