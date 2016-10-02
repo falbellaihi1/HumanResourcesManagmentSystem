@@ -99,8 +99,8 @@ public class Controller {
     private String Comments; // variable to hold comment about the new user (employee)
     private int Vacation_Balance; // variable to hold the vacation balance for the user (employee)
     private String Salary; // variable to hold the user (employee) salary
-// end of new user Variables
 
+// end of new user Variables
     //unsure variables
     private String newOtherN;
     private Users AssignUser;
@@ -129,6 +129,9 @@ public class Controller {
     private String newResidencyCardPicture = "Unknown";//variable to hold the residency card picture path
     private String newWorkerPicture = "Unknown";// variable to hold the path of the worker pic 
     private String newOtherAttachments = "Unknown";// variable holds other attachments path
+    private String EnteryIDNumber;
+    private Date EnteryDate;
+    private String InsuranceNumber;
     /* end of new worker*/
 
  /*
@@ -154,6 +157,9 @@ public class Controller {
     private String ProfileResidencyCardPicture = "Unknown";//variable to hold the residency card picture path in profile
     private String ProfileWorkerPicture = "Unknown";// variable to hold the path of the worker pic  in profile
     private String ProfileOtherAttachments = "Unknown";// variable holds other attachments path in profile
+    private String ProfileEnteryIDNumber;
+    private Date ProfileEnteryDate;
+    private String ProfileInsuranceNumber;
 
     // private List<Worker> workerProfileList = new LinkedList(); // list used to hold user search results
     /* end of profile varibles */
@@ -162,6 +168,56 @@ public class Controller {
      */
     public Controller() {
 
+    }
+
+    public String getProfileEnteryIDNumber() {
+        return ProfileEnteryIDNumber;
+    }
+
+    public void setProfileEnteryIDNumber(String ProfileEnteryIDNumber) {
+        this.ProfileEnteryIDNumber = ProfileEnteryIDNumber;
+    }
+
+    public Date getProfileEnteryDate() {
+        return ProfileEnteryDate;
+    }
+
+    public void setProfileEnteryDate(Date ProfileEnteryDate) {
+        this.ProfileEnteryDate = ProfileEnteryDate;
+    }
+
+
+
+    public String getProfileInsuranceNumber() {
+        return ProfileInsuranceNumber;
+    }
+
+    public void setProfileInsuranceNumber(String ProfileInsuranceNumber) {
+        this.ProfileInsuranceNumber = ProfileInsuranceNumber;
+    }
+
+    public String getEnteryIDNumber() {
+        return EnteryIDNumber;
+    }
+
+    public void setEnteryIDNumber(String EnteryIDNumber) {
+        this.EnteryIDNumber = EnteryIDNumber;
+    }
+
+    public Date getEnteryDate() {
+        return EnteryDate;
+    }
+
+    public void setEnteryDate(Date EnteryDate) {
+        this.EnteryDate = EnteryDate;
+    }
+
+    public String getInsuranceNumber() {
+        return InsuranceNumber;
+    }
+
+    public void setInsuranceNumber(String InsuranceNumber) {
+        this.InsuranceNumber = InsuranceNumber;
     }
 
     public int getProfileWorkerID() {
@@ -828,7 +884,9 @@ public class Controller {
         newWorker.setResidencyCardPicture(newResidencyCardPicture);
         newWorker.setOtherAttachment(newOtherAttachments);
         newWorker.setWorkerPicture(newWorkerPicture);
-
+        newWorker.setEnteryIDNumber(EnteryIDNumber);
+        newWorker.setEnteryDate(EnteryDate);
+        newWorker.setEnteryDate(EnteryDate);
         for (Worker s : workerList) { // find if there is dublicated worker
             // if (s.toString().) {
             //  System.out.println(newWorkerName + "  ;;Already in system");

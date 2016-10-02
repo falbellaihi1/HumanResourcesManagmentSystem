@@ -40,7 +40,10 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Worker.findByPassportPicture", query = "SELECT w FROM Worker w WHERE w.passportPicture = :passportPicture"),
     @NamedQuery(name = "Worker.findByResidencyCardPicture", query = "SELECT w FROM Worker w WHERE w.residencyCardPicture = :residencyCardPicture"),
     @NamedQuery(name = "Worker.findByWorkerPicture", query = "SELECT w FROM Worker w WHERE w.workerPicture = :workerPicture"),
-    @NamedQuery(name = "Worker.findByOtherAttachment", query = "SELECT w FROM Worker w WHERE w.otherAttachment = :otherAttachment")})
+    @NamedQuery(name = "Worker.findByOtherAttachment", query = "SELECT w FROM Worker w WHERE w.otherAttachment = :otherAttachment"),
+    @NamedQuery(name = "Worker.findByEnteryIDNumber", query = "SELECT w FROM Worker w WHERE w.enteryIDNumber = :enteryIDNumber"),
+    @NamedQuery(name = "Worker.findByInsuranceNumber", query = "SELECT w FROM Worker w WHERE w.insuranceNumber = :insuranceNumber"),
+    @NamedQuery(name = "Worker.findByEnteryDate", query = "SELECT w FROM Worker w WHERE w.enteryDate = :enteryDate")})
 public class Worker implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -84,6 +87,13 @@ public class Worker implements Serializable {
     @Basic(optional = false)
     @Column(name = "OtherAttachment")
     private String otherAttachment;
+    @Column(name = "EnteryIDNumber")
+    private String enteryIDNumber;
+    @Column(name = "InsuranceNumber")
+    private String insuranceNumber;
+    @Column(name = "EnteryDate")
+    @Temporal(TemporalType.DATE)
+    private Date enteryDate;
 
     public Worker() {
     }
@@ -201,6 +211,30 @@ public class Worker implements Serializable {
 
     public void setOtherAttachment(String otherAttachment) {
         this.otherAttachment = otherAttachment;
+    }
+
+    public String getEnteryIDNumber() {
+        return enteryIDNumber;
+    }
+
+    public void setEnteryIDNumber(String enteryIDNumber) {
+        this.enteryIDNumber = enteryIDNumber;
+    }
+
+    public String getInsuranceNumber() {
+        return insuranceNumber;
+    }
+
+    public void setInsuranceNumber(String insuranceNumber) {
+        this.insuranceNumber = insuranceNumber;
+    }
+
+    public Date getEnteryDate() {
+        return enteryDate;
+    }
+
+    public void setEnteryDate(Date enteryDate) {
+        this.enteryDate = enteryDate;
     }
 
     @Override

@@ -24,7 +24,8 @@ import query.exceptions.NonexistentEntityException;
 public class WorkerController implements Serializable {
 
     public WorkerController() {
-         this.emf = Persistence.createEntityManagerFactory("PlantaloguePU");
+               this.emf = Persistence.createEntityManagerFactory("PlantaloguePU");
+
     }
     private EntityManagerFactory emf = null;
 

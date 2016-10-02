@@ -71,6 +71,17 @@
                         <h:outputText value="#{workerInfo.bankAccountNumber}" />
 
                     </p:column>
+                     <p:column   style="width: 3%" headerText="رقم الحدود">
+
+                         <h:outputText value="#{workerInfo.enteryIDNumber}" />
+
+                    </p:column>   
+                    <p:column   style="width: 3%" headerText="رقم التأمين">
+
+                        <h:outputText value="#{workerInfo.insuranceNumber}" />
+
+                    </p:column>
+                    
 
                     <p:column   style="width: 3%" headerText="تاريخ انتهاء الجواز">
 
@@ -80,6 +91,12 @@
                     <p:column   style="width: 3%" headerText="تاريخ انتهاء الأقامة">
 
                         <h:outputText value="#{workerInfo.residenceCardExpiry}" />
+
+                    </p:column>
+
+                    <p:column   style="width: 3%" headerText="تاريخ انتهاء الأقامة">
+
+                        <h:outputText value="#{workerInfo.enteryDate}" />
 
                     </p:column>
 
@@ -98,11 +115,11 @@
                     <p:column   style="width: 3%" headerText="">
 
                         <p:commandButton value="صفحة العامل"
-                                           oncomplete="window.open('WorkerProfile.xhtml')" icon="ui-icon-calendar">
+                                         oncomplete="window.open('WorkerProfile.xhtml')" icon="ui-icon-calendar">
                             <p:ajax listener="#{controller.createWorkerProfile(workerInfo,index)}" />
                         </p:commandButton>
 
-                       
+
 
                     </p:column>
 
