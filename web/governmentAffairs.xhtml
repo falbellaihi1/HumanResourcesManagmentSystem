@@ -100,16 +100,34 @@
 
                         </p:column>
 
-                        <p:column   style="width: 3%;"  headerText="التنبيهات">
-
-                            <p:commandButton value="اظهار التنبيهات"   onclick="PF('u').show()" />
-
+                        <p:column   style="width: 3%;  color:  #D20005"  headerText="التنبيهات">
                             <h:outputText value="#{controller.WarnWorkerUpdates(workerInfo)}" />
+
+                            <h:outputText style=" color:  #D20005" value="#{controller.warnWorkerUpdatesCommentPic}" />
+                            <p:rowToggler />
+
+
 
 
 
 
                         </p:column>
+                        <p:rowExpansion >
+                            <h:outputText value="#{controller.WarnWorkerUpdates(workerInfo)}" />
+                            <!--need revision right here workinfo is keeping variables same value, you need to send new object each time u click on worker -->
+                            <h:outputText style=" color:  #D20005" value="#{controller.warnWorkerUpdatesCommentPic}" />
+                            <p:separator />
+                            <h:outputText style=" color:  #D20005" value="#{controller.warnWorkerUpdatesCommentCardPic}" />
+                            <p:separator />
+                            <h:outputText style=" color:  #D20005" value="#{controller.warnWorkerUpdatesCommentPassportPic}" />
+                            <p:separator />
+                            <h:outputText style=" color:  #D20005" value="#{controller.warnWorkerUpdatesCommentOtherAttachment}" />
+                            <p:separator />
+                            <h:outputText style=" color:  #D20005" value="#{controller.warnWorkerUpdatesCommentEnteryIDNumber}" />
+                            <p:separator />
+                            <h:outputText style=" color:  #D20005" value="#{controller.warnWorkerUpdatesCommentInsuranceNumber}" />
+
+                        </p:rowExpansion>
 
                         <p:column   style="width: 3%" headerText="">
 
@@ -138,27 +156,7 @@
 
 
             </h:form>
-            <p:dialog id='ud' widgetVar="u" modal="true">
-                <h:form id="warns">
-                    <p:panelGrid columns="2">
 
-                        <!--need revision right here workinfo is keeping variables same value, you need to send new object each time u click on worker -->
-                        <h:outputText style=" color:  #D20005" value="#{controller.warnWorkerUpdatesCommentPic}" />
-                        <p:separator />
-                        <h:outputText style=" color:  #D20005" value="#{controller.warnWorkerUpdatesCommentCardPic}" />
-                        <p:separator />
-                        <h:outputText style=" color:  #D20005" value="#{controller.warnWorkerUpdatesCommentPassportPic}" />
-                        <p:separator />
-                        <h:outputText style=" color:  #D20005" value="#{controller.warnWorkerUpdatesCommentOtherAttachment}" />
-                        <p:separator />
-                        <h:outputText style=" color:  #D20005" value="#{controller.warnWorkerUpdatesCommentEnteryIDNumber}" />
-                        <p:separator />
-                        <h:outputText style=" color:  #D20005" value="#{controller.warnWorkerUpdatesCommentInsuranceNumber}" />
-
-                    </p:panelGrid>
-
-                </h:form>
-            </p:dialog>
 
 
 

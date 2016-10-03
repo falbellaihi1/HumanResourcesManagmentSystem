@@ -141,7 +141,8 @@ public class Controller {
     private String WarnWorkerUpdatesCommentCardPic;
     private String WarnWorkerUpdatesCommentPassportPic;
     private String WarnWorkerUpdatesCommentOtherAttachment;
-
+    private String warnWorkerUpdatesCommentInsuranceNumber;
+    private String warnWorkerUpdatesCommentEnteryIDNumber;
 
     /*Eend of worker updates and warnings*/
  /* Profile variables */
@@ -157,17 +158,141 @@ public class Controller {
     private String ProfileResidencyCardPicture = "Unknown";//variable to hold the residency card picture path in profile
     private String ProfileWorkerPicture = "Unknown";// variable to hold the path of the worker pic  in profile
     private String ProfileOtherAttachments = "Unknown";// variable holds other attachments path in profile
-    private String ProfileEnteryIDNumber;
+    private String ProfileEnteryIDNumber = "Unknown";
     private Date ProfileEnteryDate;
-    private String ProfileInsuranceNumber;
+    private String ProfileInsuranceNumber = "Unknown";
+    private int profileIndex;
 
     // private List<Worker> workerProfileList = new LinkedList(); // list used to hold user search results
     /* end of profile varibles */
+ /*
+    
+    Begin Saudi Employee profile
+    
+    
+     */
+    private String ProfileEmployeename;
+    private String ProfileUserName;
+    private String ProfileEmployeeNumber;
+    private int ProfileSickLeave;
+    private int ProfileVacationBalance;
+    private int Profiletype;
+    private String ProfilePhoneNumber;
+    private String ProfileEmailAddress;
+    private String ProfilePicture;
+    private String ProfileSalary;
+
+    /*end of employee profile */
+
     /**
      * Creates a new instance of Controller
      */
     public Controller() {
 
+    }
+
+    public String getProfileEmployeename() {
+        return ProfileEmployeename;
+    }
+
+    public void setProfileEmployeename(String ProfileEmployeename) {
+        this.ProfileEmployeename = ProfileEmployeename;
+    }
+
+    public String getProfileUserName() {
+        return ProfileUserName;
+    }
+
+    public void setProfileUserName(String ProfileUserName) {
+        this.ProfileUserName = ProfileUserName;
+    }
+
+    public String getProfileEmployeeNumber() {
+        return ProfileEmployeeNumber;
+    }
+
+    public void setProfileEmployeeNumber(String ProfileEmployeeNumber) {
+        this.ProfileEmployeeNumber = ProfileEmployeeNumber;
+    }
+
+    public int getProfileSickLeave() {
+        return ProfileSickLeave;
+    }
+
+    public void setProfileSickLeave(int ProfileSickLeave) {
+        this.ProfileSickLeave = ProfileSickLeave;
+    }
+
+    public int getProfileVacationBalance() {
+        return ProfileVacationBalance;
+    }
+
+    public void setProfileVacationBalance(int ProfileVacationBalance) {
+        this.ProfileVacationBalance = ProfileVacationBalance;
+    }
+
+    public int getProfiletype() {
+        return Profiletype;
+    }
+
+    public void setProfiletype(int Profiletype) {
+        this.Profiletype = Profiletype;
+    }
+
+    public String getProfilePhoneNumber() {
+        return ProfilePhoneNumber;
+    }
+
+    public void setProfilePhoneNumber(String ProfilePhoneNumber) {
+        this.ProfilePhoneNumber = ProfilePhoneNumber;
+    }
+
+    public String getProfileEmailAddress() {
+        return ProfileEmailAddress;
+    }
+
+    public void setProfileEmailAddress(String ProfileEmailAddress) {
+        this.ProfileEmailAddress = ProfileEmailAddress;
+    }
+
+    public String getProfilePicture() {
+        return ProfilePicture;
+    }
+
+    public void setProfilePicture(String ProfilePicture) {
+        this.ProfilePicture = ProfilePicture;
+    }
+
+    public String getProfileSalary() {
+        return ProfileSalary;
+    }
+
+    public void setProfileSalary(String ProfileSalary) {
+        this.ProfileSalary = ProfileSalary;
+    }
+
+    public String getWarnWorkerUpdatesCommentInsuranceNumber() {
+        return warnWorkerUpdatesCommentInsuranceNumber;
+    }
+
+    public void setWarnWorkerUpdatesCommentInsuranceNumber(String warnWorkerUpdatesCommentInsuranceNumber) {
+        this.warnWorkerUpdatesCommentInsuranceNumber = warnWorkerUpdatesCommentInsuranceNumber;
+    }
+
+    public String getWarnWorkerUpdatesCommentEnteryIDNumber() {
+        return warnWorkerUpdatesCommentEnteryIDNumber;
+    }
+
+    public void setWarnWorkerUpdatesCommentEnteryIDNumber(String warnWorkerUpdatesCommentEnteryIDNumber) {
+        this.warnWorkerUpdatesCommentEnteryIDNumber = warnWorkerUpdatesCommentEnteryIDNumber;
+    }
+
+    public int getProfileIndex() {
+        return profileIndex;
+    }
+
+    public void setProfileIndex(int profileIndex) {
+        this.profileIndex = profileIndex;
     }
 
     public String getProfileEnteryIDNumber() {
@@ -185,8 +310,6 @@ public class Controller {
     public void setProfileEnteryDate(Date ProfileEnteryDate) {
         this.ProfileEnteryDate = ProfileEnteryDate;
     }
-
-
 
     public String getProfileInsuranceNumber() {
         return ProfileInsuranceNumber;
@@ -809,6 +932,15 @@ public class Controller {
         }
     }
 
+    public void removeWorker(int ID, int index) throws IllegalOrphanException {
+        try {
+            wController.destroy(ID);
+            workerList.remove(index);
+        } catch (NonexistentEntityException ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     public void removeWork(int ID, int index) {
 
     }
@@ -917,6 +1049,24 @@ public class Controller {
         ProfileResidencyCardPicture = workerInfo.getResidencyCardPicture();
         ProfileWorkerPicture = workerInfo.getWorkerPicture();
         ProfileOtherAttachments = workerInfo.getOtherAttachment();
+        profileIndex = index;
+
+    }
+
+    public void createEmployeeProfile(Users user, int index) {
+
+        System.out.println(" " + user.getId() + " " + index);
+
+        ProfileEmployeename = user.getName();
+        ProfileUserName = user.getUsername();
+        ProfileEmployeeNumber = user.getEmployenum();
+        ProfileSickLeave = user.getLeavePermissiontimes();
+        ProfileVacationBalance = user.getVacationBalance();
+        Profiletype = user.getType();
+        ProfilePhoneNumber = user.getPhone();
+        ProfileEmailAddress = user.getEmail();
+        ProfilePicture = user.getPictureID();
+        ProfileSalary = user.getSalary();
 
     }
 
@@ -1061,12 +1211,16 @@ public class Controller {
         if (wController.findWorker(workerUpdates.getId()).getWorkerPicture().equals("Unknown")
                 || wController.findWorker(workerUpdates.getId()).getPassportPicture().equals("Unknown")
                 || wController.findWorker(workerUpdates.getId()).getResidencyCardPicture().equals("Unknown")
-                || wController.findWorker(workerUpdates.getId()).getOtherAttachment().equals("Unknown")) {
+                || wController.findWorker(workerUpdates.getId()).getOtherAttachment().equals("Unknown")
+                || wController.findWorker(workerUpdates.getId()).getEnteryIDNumber().equals("Unknown")
+                || wController.findWorker(workerUpdates.getId()).getInsuranceNumber().equals("Unknown")) {
 
             WarnWorkerUpdatesCommentPic = "صورة العامل لم ترفع بعد";
             WarnWorkerUpdatesCommentCardPic = " صورة بطاقة الأقامة لم ترفع بعد";
             WarnWorkerUpdatesCommentPassportPic = "صورة الجواز لم ترفع بعد";
             WarnWorkerUpdatesCommentOtherAttachment = "لم يتم ارفاق مرفقات اخر لهذا العامل ";
+            warnWorkerUpdatesCommentInsuranceNumber = "لم تتم اضافة رقم التأمين الصحي للعامل";
+            warnWorkerUpdatesCommentEnteryIDNumber = "لم تتم اضافة رقم الحدود الخاصة بهذا العامل";
 
         } else {
 
@@ -1074,7 +1228,8 @@ public class Controller {
             WarnWorkerUpdatesCommentCardPic = ""; //clear variable if already uploaded a picture
             WarnWorkerUpdatesCommentPassportPic = ""; // clear the variable if already uploaded picture
             WarnWorkerUpdatesCommentOtherAttachment = ""; //clear the variable if already uploaded a picture
-
+            warnWorkerUpdatesCommentInsuranceNumber = "";
+            warnWorkerUpdatesCommentEnteryIDNumber = "";
         }
 
     }

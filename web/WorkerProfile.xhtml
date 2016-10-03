@@ -73,8 +73,19 @@
                     <p:graphicImage name="#{controller.profileResidencyCardPicture}" />
 
 
-                </p:panelGrid>
 
+                    <p:column >
+                        <p:commandButton id="deleteButton" icon="ui-icon-trash" value="حذف الموظف"
+                                         title="حذف الموظف" actionListener="#{controller.removeWorker(controller.profileWorkerID, controller.profileIndex)}"  oncomplete="window.close()"
+
+                                         />
+                    </p:column>
+
+                    
+                    
+
+                </p:panelGrid>
+               
 
 
 

@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./templates/Template.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <ui:define name="content">
+        <h:body >
+            <h:form  id="hf1" >
+                <p:growl life="5000" />
+
+
+                <p:toolbar>
+                    <f:facet name="left">
+                        <p:button outcome="ControlPanel" value="متابعة الطلبات وسير العمل" icon="ui-icon-home">
+                        </p:button>
+                        <p:commandButton rendered="#{controller.username !=null}"  value="اضافة عامل" icon="ui-icon-squaresmall-plus" onclick="PF('add').show();"/>
+                        <p:commandButton rendered="#{controller.username !=null}" action ="#{controller.logout()}" ajax="true" value="تسجيل الخروج" icon="ui-icon-power"/>
+
+
+                    </f:facet>
+                </p:toolbar>
+                <p:separator />
+
+
+
+                <h:panelGroup >
+                    <p:panelGrid columns="2" style="width: 100%; margin:0 auto;  border-collapse: separate ;"  >
+
+
+                        <f:facet name="header">
+                            <p:graphicImage name="#{controller.profilePicture}" />
+                        </f:facet>
+
+                        <h:outputText style=" float: right;" value="#{controller.profileUserName}" />
+                        <h:outputText style=" float: right" value="اسم المستخدم" />
+
+                        <h:outputText style=" float: right" value="#{controller.profileEmployeename}" />
+                        <h:outputText style=" float: right" value="الاسم" />
+
+                        <h:outputText  style=" float: right" value="#{controller.profileSickLeave}" />
+                        <h:outputText style=" float: right" value="الأستأذانات" />
+
+                        <h:outputText  style=" float: right" value="#{controller.profileEmployeeNumber}" />
+                        <h:outputText style=" float: right" value="الرقم الوظيفي" />
+
+                        <h:outputText style=" float: right" value="#{controller.profiletype}" />
+                        <h:outputText  style=" float: right" value="الصلاحيات" />
+
+                        <h:outputText style=" float: right" value="#{controller.profilePhoneNumber}" />
+                        <h:outputText  style=" float: right" value="رقم الجوال" />
+
+                        <h:outputText style=" float: right" value="#{controller.profileEmailAddress}" />
+                        <h:outputText style=" float: right" value="البريد الألكتروني" />
+
+                        <h:outputText style=" float: right"   value="#{controller.profileSalary}" />
+                        <h:outputText style=" float: right"  value="الراتب" />
+
+
+
+                        <h:outputText style=" float: right"  value="#{controller.profileResidenceCardExpiry}" />
+                        <h:outputText style=" float: right" value="تاريخ بداية العقد" />
+
+                        <h:outputText style=" float: right" value="#{controller.profilePassportExpiry}" />
+                        <h:outputText  style=" float: right" value="تاريخ نهاية العقد" />
+
+
+                    </p:panelGrid>
+
+                </h:panelGroup>
+
+
+
+
+            </h:form>
+        </h:body>
+    </ui:define>
+
+</ui:composition>
