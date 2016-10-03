@@ -33,7 +33,7 @@
 
 
                 <p:panel id="Musers" header="الموظفين والحسابات" >
-                    <p:dataTable id="dt"   tableStyle="width:auto" cellSeparator="true" editMode="cell" editable="true"  var="user" value="#{controller.usersList}" paginator="true" rows="10" rowIndexVar="index">
+                    <p:dataTable id="dt" tableStyle="width:auto" cellSeparator="true" editMode="cell" editable="true"  var="user" value="#{controller.usersList}" paginator="true" rows="10" rowIndexVar="index">
                         <p:ajax id="aj" event="cellEdit" listener="#{controller.editUser(user)}" update="dt"/>
 
                         <p:column   style="width: 3%" headerText="رقم التعريف">
@@ -169,8 +169,20 @@
                         <p:column >
                             <p:commandButton id="deleteButton" icon="ui-icon-trash" value="حذف الموظف"
                                              title="حذف الموظف"
-                                             actionListener="#{controller.removeUser(user.id, index)}" 
+                                             actionListener="#{controller.removeWorker(user.id, index)}" 
                                              update="dt" />
+                        </p:column>
+                        
+                        
+                         <p:column   style="width: 3%" headerText="">
+
+                            <p:commandButton value="صفحة الموظف"
+                                             oncomplete="window.open('EmployeeProfile.xhtml')" icon="ui-icon-calendar">
+                                <p:ajax listener="#{controller.createEmployeeProfile(user,index)}" />
+                            </p:commandButton>
+
+
+
                         </p:column>
                         
                     </p:dataTable>
