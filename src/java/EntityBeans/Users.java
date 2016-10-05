@@ -252,5 +252,8 @@ public class Users implements Serializable {
     public String toString() {
         return name; //returns the name of the employee that the request is hanging on
     }
+     public Integer toStringNumber() {
+        return id; //returns the name of the employee that the request is hanging on
+    }
 
 }

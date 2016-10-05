@@ -31,7 +31,11 @@
 
                         <p:commandButton rendered="#{controller.username !=null}" action ="#{controller.logout()}" ajax="false" value="تسجيل الخروج" icon="ui-icon-power"/>
 
-                        <p:inputText value="#{controller.currentUID}"></p:inputText>
+                        <p:dataGrid var="notification" value="#{controller.notificationList}">
+                        
+                            <p:outputLabel value="#{notification.notificationMessage2}"></p:outputLabel>
+                        
+                        </p:dataGrid>
 
                     </f:facet>
 

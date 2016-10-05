@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 
+import EntityBeans.Notifications;
 import EntityBeans.ResignationRequest;
 
 import EntityBeans.Users;
@@ -37,12 +38,12 @@ import java.io.FileOutputStream;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.Objects;
 
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import query.NotificationsController;
 import query.ResignationRequestController;
 
 import query.UsersController;
@@ -184,7 +185,16 @@ public class Controller {
     private String ProfileSalary;
 
     /*end of employee profile */
+    /*Notification for ToDo task*/
     private String YouGotNotifcation;
+    private String NotificationMessage1;
+    private String NotificationMessage2;
+    private String NotificationMessage3;
+    private List<Notifications> notificationList;
+    private NotificationsController nController = new NotificationsController();
+    
+ 
+    /*End of todo*/
 
     /**
      * Creates a new instance of Controller
@@ -193,6 +203,42 @@ public class Controller {
 
     }
 
+    public String getNotificationMessage1() {
+        return NotificationMessage1;
+    }
+
+    public void setNotificationMessage1(String NotificationMessage1) {
+        this.NotificationMessage1 = NotificationMessage1;
+    }
+
+    public String getNotificationMessage2() {
+        return NotificationMessage2;
+    }
+
+    public void setNotificationMessage2(String NotificationMessage2) {
+        this.NotificationMessage2 = NotificationMessage2;
+    }
+
+    public String getNotificationMessage3() {
+        return NotificationMessage3;
+    }
+
+    public void setNotificationMessage3(String NotificationMessage3) {
+        this.NotificationMessage3 = NotificationMessage3;
+    }
+
+    
+    
+    public List<Notifications> getNotificationList() {
+        return notificationList;
+    }
+
+    public void setNotificationList(List<Notifications> notificationList) {
+        this.notificationList = notificationList;
+    }
+
+   
+    
     public String getYouGotNotifcation() {
         return YouGotNotifcation;
     }
@@ -201,7 +247,6 @@ public class Controller {
         this.YouGotNotifcation = YouGotNotifcation;
     }
 
-    
     public String getProfileEmployeename() {
         return ProfileEmployeename;
     }
@@ -1096,8 +1141,6 @@ public class Controller {
 
         rController.create(newResign);
         resignList = rController.findResignationRequestEntities(); //retrieves all the resigns from the database
-        
-      
 
     }
 
@@ -1137,12 +1180,36 @@ public class Controller {
             Logger.getLogger(Controller.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
+        int i;
+        i = r.getUserID().toStringNumber();
+       // System.out.println("user id is equal " + CurrentUID + " ==" + r.getUserID() + " i ->>>> " + i);
+        if (i == CurrentUID) {
+           
 
-      
-          if(r.getUserID().toString().equals(CurrentUID.toString())){
-        } else {
-              System.out.println("user id is equal "+ CurrentUID +" ==" + r.getUserID() );
+            
+            NewTask(i,r);
+            NotificationMessage1 = "You got new task to do" + r.getName() +" has applied for resign his notes are " + r.getNotes() + ", please follow up with his request #"
+                 + r.getId();
+            Notifications n = new Notifications();
+            n.setNotificationMessage2(NotificationMessage1);
+            n.setNotificationMessage3(NotificationMessage1);
+            n.setNotificationMessage4(NotificationMessage1);
+            nController.create(n);
+            notificationList = nController.findNotificationsEntities();
+            
         }
+        else {
+           // YouGotNotifcation = "";
+        }
+    }
+    public void NewTask(int i, ResignationRequest r){
+      
+         System.out.println("user id is equal " + CurrentUID + " ==" + r.getUserID() + " i ->>>> " + i+" ->> found ");
+          
+         
+        // YouGotNotifcation = "You got new task to do" + r.getName() +" has applied for resign his notes are " + r.getNotes() + ", please follow up with his request #"
+                 //+ r.getId();
+         
     }
 
     public List<Users> getUsersList() {
@@ -1195,10 +1262,14 @@ public class Controller {
         usersList = uController.findUsersEntities(); //retrieves all the users from the database
         resignList = rController.findResignationRequestEntities(); //retrieves all the resigns from the database
         workerList = wController.findWorkerEntities(); // to fetch worker information and insert it into the list
+        notificationList =nController.findNotificationsEntities();
         Users user = uController.login(username, password, type);
 
+      
         CurrentUID = user.getId();
+   
 
+   
         System.out.println("\n\n\n test test " + username + " -- " + password + "user id is " + user.getId());
         if (user == null) {
             return null;
