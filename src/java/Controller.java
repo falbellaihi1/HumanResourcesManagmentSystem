@@ -37,6 +37,7 @@ import java.io.FileOutputStream;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Objects;
 
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -183,6 +184,7 @@ public class Controller {
     private String ProfileSalary;
 
     /*end of employee profile */
+    private String YouGotNotifcation;
 
     /**
      * Creates a new instance of Controller
@@ -191,6 +193,15 @@ public class Controller {
 
     }
 
+    public String getYouGotNotifcation() {
+        return YouGotNotifcation;
+    }
+
+    public void setYouGotNotifcation(String YouGotNotifcation) {
+        this.YouGotNotifcation = YouGotNotifcation;
+    }
+
+    
     public String getProfileEmployeename() {
         return ProfileEmployeename;
     }
@@ -1085,6 +1096,8 @@ public class Controller {
 
         rController.create(newResign);
         resignList = rController.findResignationRequestEntities(); //retrieves all the resigns from the database
+        
+      
 
     }
 
@@ -1125,6 +1138,11 @@ public class Controller {
                     .getName()).log(Level.SEVERE, null, ex);
         }
 
+      
+          if(r.getUserID().toString().equals(CurrentUID.toString())){
+        } else {
+              System.out.println("user id is equal "+ CurrentUID +" ==" + r.getUserID() );
+        }
     }
 
     public List<Users> getUsersList() {
