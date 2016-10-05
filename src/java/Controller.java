@@ -1341,7 +1341,7 @@ public class Controller {
         password = null;
         type = -10;
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
-        return "index.xhtml";
+        return "signin.xhtml";
 
     }
 

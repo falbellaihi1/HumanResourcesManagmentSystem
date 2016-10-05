@@ -14,15 +14,13 @@
 
                 <p:toolbar  >
                     <f:facet name="left">
-                        <p:button outcome="ControlPanel" value="متابعة الطلبات وسير العمل" icon="ui-icon-home" >
-                        </p:button>
+                       
 
                         <p:commandButton value="طباعة" type="button" icon="ui-icon-print" >
                             <p:printer target="image" /></p:commandButton> <p:graphicImage id="image"  />
 
 
                       
-                        <p:commandButton rendered="#{controller.username !=null}" action ="#{controller.logout()}" ajax="false" value="تسجيل الخروج" icon="ui-icon-power"/>
                        
                         
 

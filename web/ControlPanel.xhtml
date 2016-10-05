@@ -15,31 +15,15 @@
                 <p:toolbar style=" ">
                     <f:facet name="left" >
 
-                        <p:button  outcome="ControlPanel" value="متابعة الطلبات وسير العمل" icon="ui-icon-home" />
-
-                        <p:button outcome="ManageEmployee" value="الموظفين" icon="ui-icon-person"/>
-
-                        <p:button outcome="workinformation" value="معلومات" icon="ui-icon-gear"/>
-
-                        <p:button outcome="requests" value="رفع طلب جديد" icon="ui-icon-clock"/>
-
-                        <p:button outcome="calender" value="الرواتب" icon="ui-icon-calendar"/>
-
-                        <p:button outcome="governmentAffairs" value="العلاقات الحكومية والعمال" icon="ui-icon-calendar"/>
-                        
-                         <p:button  outcome="Accounting" value="المحاسبة" icon="ui-icon-home" />
-                         
-                         <p:button  outcome="BankAffairs" value="العلاقات البنكية" icon="ui-icon-home" />
-                        <p:commandButton  rendered="#{controller.username !=null}" action ="#{controller.logout()}" ajax="false" value="تسجيل الخروج" icon="ui-icon-power"/>
-
+                      
                     </f:facet>
                 </p:toolbar>
-                <p:separator/>
+       
 
 
 
 
-                <p:outputLabel style=" color:  #006666;">#{controller.username} مرحباَ </p:outputLabel>  
+               
 
 
 

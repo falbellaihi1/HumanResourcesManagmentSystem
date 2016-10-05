@@ -16,10 +16,7 @@
 
                 <p:toolbar>
                     <f:facet name="left">
-                        <p:button outcome="ControlPanel" value="متابعة الطلبات وسير العمل" icon="ui-icon-home">
-                        </p:button>
-                        <p:commandButton rendered="#{controller.username !=null}"  value="اظافة موظف" icon="ui-icon-squaresmall-plus" onclick="PF('add').show();"/>
-                        <p:commandButton rendered="#{controller.username !=null}" action ="#{controller.logout()}" ajax="true" value="تسجيل الخروج" icon="ui-icon-power"/>
+                        
                         <p:inputText id="text"  required="false" label="text" value="#{controller.SU}"  />
                         <p:commandButton id="cm" action="#{controller.searchUser()}" value="بحث" icon="ui-icon-search" oncomplete="PF('result').show();" update="f3:su"/> 
 
@@ -29,7 +26,7 @@
 
                 </p:toolbar>
 
-                <p:separator />
+             
 
 
                 <p:panel id="Musers" header="الموظفين والحسابات" >
