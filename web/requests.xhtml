@@ -31,6 +31,7 @@
 
                         <p:commandButton rendered="#{controller.username !=null}" action ="#{controller.logout()}" ajax="false" value="تسجيل الخروج" icon="ui-icon-power"/>
 
+                        <p:inputText value="#{controller.currentUID}"></p:inputText>
 
                     </f:facet>
 
@@ -110,9 +111,9 @@
                                                  actionListener="#{controller.removeResign(resign.id, index1)}" 
                                                  update="resignTable1" />
                             </p:column>
-                                <p:column headerText="التنبيهات">
-                               
-                                   <h:outputText value="#{resign.notes}" />
+                            <p:column headerText="التنبيهات">
+
+                                <h:outputText value="#{resign.notes}" />
 
                             </p:column>
 
@@ -126,7 +127,7 @@
 
 
                     <p:dataTable cellSeparator="true" editMode="cell" editable="true" id="resignTable2" var="resign" value="#{controller.resignList}" paginator="true"    rows="10" rowIndexVar="index">
-                      
+
 
                         <p:column headerText="الرقم الوظيفي">
                             <p:cellEditor>
@@ -183,7 +184,7 @@
 
 
                     <p:dataTable cellSeparator="true" editMode="cell" editable="true" id="resignTable3" var="resign" value="#{controller.resignList}" paginator="true"    rows="10" rowIndexVar="index">
-                       
+
 
                         <p:column headerText="الرقم الوظيفي">
                             <p:cellEditor>
@@ -235,9 +236,9 @@
                 </p:panel>
 
 
-                <h:form id='resignf'>
-                    <p:dialog id='res' header="طلب استقالة" widgetVar="resign" minHeight="40">
 
+                <p:dialog id='res' header="طلب استقالة" widgetVar="resign" minHeight="40">
+                    <h:form id='resignf'>
                         <h:outputText value="ادخل معلومات الموظف" />
                         <p:panelGrid  columns="2">
 
@@ -266,18 +267,19 @@
 
 
 
-                            <p:commandButton value="ارسال طلب الاستقالة" action="#{controller.createResignRequest()}" onclick="PF('resign').hide();" update="@all"/>
+                            
+                            <p:commandButton value="ارسال طلب الاستقالة" action="#{controller.createResignRequest()}" onclick="PF('resign').hide();" process="resignf" type="submit" update="@all" />
 
                         </p:panelGrid>
 
+                    </h:form>
+                </p:dialog>
 
-                    </p:dialog>
-                </h:form>
 
 
-                <h:form id='monf'>
-                    <p:dialog id='mon' header="طلب مالي" widgetVar="money" minHeight="40">
 
+                <p:dialog id='mon' header="طلب مالي" widgetVar="money" minHeight="40">
+                    <h:form id='monf'>
                         <h:outputText value="ادخل معلومات الطلب" />
                         <p:panelGrid  columns="2">
 
@@ -300,14 +302,14 @@
 
                         </p:panelGrid>
 
+                    </h:form>
+                </p:dialog>
 
-                    </p:dialog>
-                </h:form>
 
-                <h:form id='vacf'>
 
-                    <p:dialog id='vac' header="اجازة" widgetVar="vacation" minHeight="40" >
 
+                <p:dialog id='vac' header="اجازة" widgetVar="vacation" minHeight="40" >
+                    <h:form id='vacf'>
                         <h:outputText value="ادخل معلومات الطلب" />
                         <p:panelGrid  columns="2">
 
@@ -328,11 +330,11 @@
                             <p:commandButton value="ارسال الطلب" action="#{controller.createResignRequest()}" oncomplete="PF('vacation').hide();" update="@all"/>
 
                         </p:panelGrid>
+                    </h:form>
+
+                </p:dialog>
 
 
-                    </p:dialog>
-
-                </h:form>
 
 
             </h:form>
