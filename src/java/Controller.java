@@ -740,7 +740,7 @@ public class Controller {
                 "exceldatabase.xlsx written successfully");
     }
 
-    public void h() {
+    public void forGotPass() {
 
         Users u = new Users();
         u = uController.findU(ForUser);
