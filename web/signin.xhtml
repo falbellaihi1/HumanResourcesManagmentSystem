@@ -44,11 +44,11 @@
                     <div class="Seperator"></div>
                     
                     <div class="EmptyBox10"></div>
-                    <p:button  value="Forgot Password ?" styleClass="Fs16 RedButton" href="signin.xhtml"></p:button>
-                    <p:button  value="Contact Admin ?" styleClass="Fs16 OrangeButton" href="signin.xhtml"></p:button>
+                    <p:button  value="نسيت كلمة السر؟" styleClass="Fs16 RedButton" href="forgotpassword.xhtml"></p:button>
+                    <p:button  value="تواصل مع المدير؟" styleClass="Fs16 OrangeButton" href="signin.xhtml"></p:button>
                     <div class="EmptyBox50"></div>
                     <h:form >
-                        <p:dialog header="Log In" widgetVar="LogIn" modal="true" height="200" resizable="false"  draggable="false"  > 
+                        <p:dialog header="تسجيل الدخول" widgetVar="LogIn" modal="true" height="200" resizable="false"  draggable="false"  > 
 
 
                             <p:messages id="msgs" autoUpdate="false"/>
@@ -56,17 +56,17 @@
 
                             <div class="EmptyBox10"></div>
 
-                                <p:inputText value="#{controller.username}" placeholder="Username" styleClass="Container80 Fnone MarAuto Fs18"/>
+                                <p:inputText value="#{controller.username}" placeholder="اسم المستخدم" styleClass="Container80 Fnone MarAuto Fs18"/>
                             
                             <div class="EmptyBox10"></div>
                             
-                            <p:password value="#{controller.password}" placeholder="Password" styleClass="Container80 Fnone MarAuto Fs18" feedback="false"/>
+                            <p:password value="#{controller.password}" placeholder="الكلمة السرية" styleClass="Container80 Fnone MarAuto Fs18" feedback="false"/>
                             
                             <div class="EmptyBox20"></div>
 
                             <div class="Container85 Fnone MarAuto softgray">
                                 <div class="EmptyBox5"></div>
-                                <p:selectBooleanCheckbox value="accept" itemLabel="I Accept Terms And Policies"/>
+                                <p:selectBooleanCheckbox value="accept" itemLabel="اوافق على قوانين الأستخدام"/>
                             </div>
                         
 
@@ -74,10 +74,9 @@
 
 
                             <f:facet name="footer">
-                                <p:commandButton action="#{controller.login()}"  value="Sign In" />
+                                <p:commandButton action="#{controller.login()}"  value="تسجيل الدخول" />
 
-                                <p:button  outcome="forgotpassword" value="Forgot Password" />
-
+                                
                             </f:facet>
 
 
