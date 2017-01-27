@@ -18,7 +18,7 @@
                     <f:facet name="left">
                         
                         <p:inputText id="text"  required="false" label="text" value="#{controller.SU}"  />
-                        <p:commandButton id="cm" action="#{controller.searchUser()}" value="بحث" icon="ui-icon-search" oncomplete="PF('result').show();" update="f3:su"/> 
+                        <p:commandButton id="cm"  action="#{controller.searchUser()}" value="بحث" icon="ui-icon-search" oncomplete="PF('result').show();" update="f3:su"></p:commandButton> 
 
 
                     </f:facet>
@@ -231,8 +231,8 @@
                 </p:panel>
 
                 <h:form id="f3">
-                    <p:dialog header="Resultt" widgetVar="result" minHeight="40"  >
-                        <p:dataTable cellSeparator="true"  tableStyle="width:auto" editMode="cell" editable="true" id="su" var="suser" value="#{controller.usersList}" paginator="true" rows="10" rowIndexVar="index1">
+                    <p:dialog header="Result" widgetVar="result" minHeight="40"  >
+                        <p:dataTable cellSeparator="true"  tableStyle="width:auto" editMode="cell" editable="true" id="su" var="suser" value="#{controller.userresult}" paginator="true" rows="10" rowIndexVar="index1">
                             <p:ajax event ="cellEdit" listener="#{controller.editUser(user)}" update="su"/>
 
                             <p:column headerText="User ID">

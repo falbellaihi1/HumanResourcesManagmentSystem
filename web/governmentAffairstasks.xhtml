@@ -1,0 +1,137 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./templates/Template.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <ui:define name="content">
+        <h:body >
+            <h:form  id="hf1" >
+                <p:growl life="5000" />
+
+
+                <p:toolbar>
+                    <f:facet name="left">
+                        <p:commandButton rendered="#{controller.username !=null}"  value="معاملة جديده" icon="ui-icon-squaresmall-plus" onclick="PF('add').show();"/>
+                        
+
+
+                    </f:facet>
+
+
+                </p:toolbar>
+
+                <p:separator />
+                <h:panelGroup id="content" layout="block">
+
+                    <p:dataTable   tableStyle="width:auto" cellSeparator="true" editMode="cell" editable="true" id="WorkerTable"
+                                   var="workerInfo" value="#{controller.workerList}" paginator="true"   
+                                   rows="3" rowIndexVar="index"   style=" size: auto">
+
+
+                        <p:column   style="width: 3%" headerText="رقم التعريف">
+
+                            <h:outputText value="#{workerInfo.id}" />
+
+                        </p:column>
+
+
+
+                        <p:column   style="width: 3%" headerText="اسم الموظف">
+
+                            <h:outputText value="#{workerInfo.workerName}" />
+
+                        </p:column>
+
+                        <p:column   style="width: 3%" headerText="رقم الموظف">
+
+                            <h:outputText value="#{workerInfo.nationality}" />
+
+                        </p:column>
+  
+
+                        <p:column   style="width: 3%" headerText="تاريخ التكليف">
+
+                            <h:outputText value="#{workerInfo.passportExpiry}" />
+
+                        </p:column>
+                        <p:column   style="width: 3%" headerText="تاريخ انهاء المعامله">
+
+                            <h:outputText value="#{workerInfo.residenceCardExpiry}" />
+
+                        </p:column>
+
+                    
+                        <p:column   style="width: 3%" headerText="">
+
+                            <p:commandButton value="صفحة الموظف"
+                                             oncomplete="window.open('WorkerProfile.xhtml')" icon="ui-icon-calendar">
+                                <p:ajax listener="#{controller.createWorkerProfile(workerInfo,index)}" />
+                            </p:commandButton>
+
+
+
+                        </p:column>
+
+
+                    </p:dataTable>
+                </h:panelGroup>
+
+
+
+
+
+
+
+
+
+
+
+
+            </h:form>
+
+
+
+
+            <p:dialog header="معامله جديده" widgetVar="add" minHeight="40">
+                <h:form id="addWorker">
+                    <h:outputText value="ادخل معلومات المعامله" />
+                    <p:panelGrid  columns="2">
+
+
+                        <p:outputLabel value="اسم الموظف"/> 
+                        <p:inputText value="#{controller.newWorkerName}" required="true" requiredMessage="حقل الباسوورد اجباري"/>
+
+                        <p:outputLabel value="رقم الموظف"/> 
+                        <p:inputText value="#{controller.newNationality}" required="true" requiredMessage="حقل الباسوورد اجباري"/>
+
+                        <p:outputLabel value="وقت تسليم المعامله"/> 
+                        <p:inputText value="#{controller.newResidenceCardNumber}"/>
+
+                      
+                       
+                        
+                        <p:outputLabel value="تاريخ تسليم المعامله" /> 
+                        <p:calendar  value="#{controller.newResidenceCardExpiry}"/>
+
+
+                        <p:outputLabel value="تاريخ انتهاء المعاملة" /> 
+                        <p:calendar  value="#{controller.newPassportExpiry}"/>
+
+                       
+
+
+
+                        <p:commandButton value="اتمام" action="#{controller.createWorker()}" oncomplete="PF('add').hide();" update="@form"/>
+
+                    </p:panelGrid>
+
+                </h:form>
+            </p:dialog>
+
+        </h:body>
+    </ui:define>
+
+</ui:composition>

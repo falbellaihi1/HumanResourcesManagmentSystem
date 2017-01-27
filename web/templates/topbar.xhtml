@@ -10,7 +10,7 @@
 
     <div id="layout-topbar" class="ShadowGray" >
         <div id="layout-topbar-indent">
-            <a href="dashboard.xhtml"><h:graphicImage name="images/LOGO.png" styleClass="Fleft" library="spark-layout" id="logo" class="Fleft"/></a>
+            <a href="ControlPanel.xhtml"><h:graphicImage name="images/LOGO.png" styleClass="Fleft" library="spark-layout" id="logo" class="Fleft"/></a>
             <a href="#" id="mobile-menu-button" class="BordRad3 white ShowOnMobile"><i class="fa fa-bars"></i> Menu</a>
             <a href="#" id="mobile-menu-button-gray" class="BordRad3 white ShowOnMobile"><i class="fa fa-caret-down"></i> Top Menu</a>
 
@@ -41,13 +41,10 @@
                 </li>
                 <li class="fa fa-ellipsis-v menu-separator"></li>
                 <li>
-                    <a class="Animated05 CursPointer"><i class="fa fa-bell animated swing infinite red"></i> الرسائل <span class="notification-bubble BordRad3 animated rubberBand">24</span> <i class="fa fa-chevron-down Fs14 Fright ShowOnMobile"></i></a>
+                    <a class="Animated05 CursPointer"><i class="fa fa-bell animated swing infinite red"></i> الرسائل <span class="notification-bubble BordRad3 animated rubberBand">#{controller.notificationList.size()}</span> <i class="fa fa-chevron-down Fs14 Fright ShowOnMobile"></i></a>
                     <ul style="width:200px; margin-left:-45px;" class="Animated03 submenu">
-                        <li><a href="#" class="Animated05"><i class="fa fa-envelope Fs18 blue"></i> <span class="Fright Fs16 TexAlRight">#{controller.notificationMessage1}<span class="Fs10 DispBlock">تنبيه</span></span></a></li>
-                        <li><a href="#" class="Animated05"><i class="fa fa-envelope Fs18"></i> <span class="Fright Fs16 TexAlRight">#{controller.notificationMessage1}<span class="Fs10 DispBlock">تنبية</span></span></a></li>
-                        <li><a href="#" class="Animated05"><i class="fa fa-envelope Fs18 blue"></i> <span class="Fright Fs16 TexAlRight">#{controller.notificationMessage1}<span class="Fs10 DispBlock">تنبيه</span></span></a></li>
-                        <li><a href="#" class="Animated05"><i class="fa fa-envelope Fs18 red animated infinite rubberBand"></i> <span class="Fright Fs16 TexAlRight">#{controller.notificationMessage1}<span class="Fs10 DispBlock">تنبيه</span></span></a></li>
-                        <li><a href="#" class="Animated05"><i class="fa fa-envelope Fs18 orange"></i> <span class="Fright Fs16 TexAlRight">#{controller.notificationMessage1}<span class="Fs10 DispBlock">تنبيه</span></span></a></li>
+                        
+                        <li><a href="#messages.xhtml" class="Animated05"><i class="fa fa-envelope Fs18 red animated infinite rubberBand"></i> <span class="Fright Fs16 TexAlRight">#{controller.notificationMessage1}<span class="Fs10 DispBlock">تنبيه</span></span></a></li>
                     </ul>
                 </li>
                 <li class="fa fa-ellipsis-v menu-separator"></li>

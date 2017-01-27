@@ -52,7 +52,7 @@
                         <p:dataTable id="resignTable1" cellSeparator="true" editMode="cell" editable="true"  var="resign" value="#{controller.resignList}" paginator="true"    rows="10" rowIndexVar="index1">
                             <p:ajax id="aj" event="cellEdit" listener="#{controller.editUser(user)}" update="resignTable1"/>
 
-                            <p:column headerText="#{translate.arEmp}">
+                            <p:column headerText="الرقم الوظيفي">
                                 <p:cellEditor>
                                     <f:facet name="output"> <h:outputText value="#{resign.employeeNum}" /></f:facet>
                                     <f:facet name="input"> <h:inputText value="#{resign.employeeNum}" /></f:facet>

@@ -185,22 +185,62 @@ public class Controller {
     private String ProfileSalary;
 
     /*end of employee profile */
-    /*Notification for ToDo task*/
+ /*Notification for ToDo task*/
     private String YouGotNotifcation;
     private String NotificationMessage1;
     private String NotificationMessage2;
     private String NotificationMessage3;
     private List<Notifications> notificationList;
     private NotificationsController nController = new NotificationsController();
-    
- 
-    /*End of todo*/
 
+    /*End of todo*/
+ /*Government Affairs tasks */
+ /* ************** NO DATABASE HAS BEEN CREATED FOR THESE FIELDS JUST YET!! ******************* 
+    
+     */
+    private int GTaskID;
+    private String GovEmployeeName;
+    private Date DateOfAssignment;
+    private Date DueDateOfTask;
+
+    /*End of Government Affairs tasks */
     /**
      * Creates a new instance of Controller
      */
     public Controller() {
 
+    }
+
+    public int getGTaskID() {
+        return GTaskID;
+    }
+
+    public void setGTaskID(int GTaskID) {
+        this.GTaskID = GTaskID;
+    }
+
+    public String getGovEmployeeName() {
+        return GovEmployeeName;
+    }
+
+    public void setGovEmployeeName(String GovEmployeeName) {
+        this.GovEmployeeName = GovEmployeeName;
+    }
+
+    public Date getDateOfAssignment() {
+        return DateOfAssignment;
+    }
+
+    public void setDateOfAssignment(Date DateOfAssignment) {
+        this.DateOfAssignment = DateOfAssignment;
+    }
+
+    public Date getDueDateOfTask() {
+        return DueDateOfTask;
+    }
+
+    public void setDueDateOfTask(Date DueDateOfTask) {
+        this.DueDateOfTask = DueDateOfTask;
     }
 
     public String getNotificationMessage1() {
@@ -227,8 +267,6 @@ public class Controller {
         this.NotificationMessage3 = NotificationMessage3;
     }
 
-    
-    
     public List<Notifications> getNotificationList() {
         return notificationList;
     }
@@ -237,8 +275,6 @@ public class Controller {
         this.notificationList = notificationList;
     }
 
-   
-    
     public String getYouGotNotifcation() {
         return YouGotNotifcation;
     }
@@ -756,7 +792,7 @@ public class Controller {
             email.setSSLOnConnect(true);
             try {
                 email.setFrom("falbellaihi12345@gmail.com");
-                email.setSubject("Reset Plantalouge Password!");
+                email.setSubject("Reset MITS Password!");
                 email.setMsg(u.getName() + " Hello!, Here is your login information " + u.getUsername() + " " + u.getPassword());
                 email.addTo("falbellaihi@hotmail.com");
                 email.send();
@@ -804,12 +840,16 @@ public class Controller {
     public void searchUser() {
 
         System.out.println("searching ...");
+        System.out.println(userresult);
 
         userresult.clear();
         for (Users str : usersList) {
-            if (str.toString().contains(SU)) {
+            if (str.toString().equalsIgnoreCase(SU)) {
                 System.out.println(str);
                 userresult.add(str);
+                SU = "";
+                System.out.println("Search user result returns " + str);
+                System.out.println("SU returns " + SU);
 
             }
         }
@@ -1009,7 +1049,7 @@ public class Controller {
             rController.destroy(ID);
             resignList.remove(index);
         } catch (NonexistentEntityException ex) {
-            ex.printStackTrace();;
+            ex.printStackTrace();
         }
     }
 
@@ -1056,6 +1096,7 @@ public class Controller {
     }
 
     public void createWorker() { //creates new worker
+        System.out.println("creating worker");
         workerList = wController.findWorkerEntities();
         /*
         creates new worker
@@ -1075,17 +1116,16 @@ public class Controller {
         newWorker.setEnteryIDNumber(EnteryIDNumber);
         newWorker.setEnteryDate(EnteryDate);
         newWorker.setEnteryDate(EnteryDate);
-        for (Worker s : workerList) { // find if there is dublicated worker
-            // if (s.toString().) {
-            //  System.out.println(newWorkerName + "  ;;Already in system");
-            //}
-            // else {
-            //   System.out.println("  -> " + s.toString());
-            // }
+
+        for (Worker str : workerList) {
+            if (str.toString().equalsIgnoreCase(newWorkerName)) {
+                System.out.println(str);
+
+            }
+
         }
 
         wController.create(newWorker);
-
         workerList = wController.findWorkerEntities();
 
     }
@@ -1182,34 +1222,30 @@ public class Controller {
         }
         int i;
         i = r.getUserID().toStringNumber();
-       // System.out.println("user id is equal " + CurrentUID + " ==" + r.getUserID() + " i ->>>> " + i);
+        // System.out.println("user id is equal " + CurrentUID + " ==" + r.getUserID() + " i ->>>> " + i);
         if (i == CurrentUID) {
-           
 
-            
-            NewTask(i,r);
-            NotificationMessage1 = "You got new task to do" + r.getName() +" has applied for resign his notes are " + r.getNotes() + ", please follow up with his request #"
-                 + r.getId();
+            NewTask(i, r);
+            NotificationMessage1 = "You got new task to do" + r.getName() + " has applied for resign his notes are " + r.getNotes() + ", please follow up with his request #"
+                    + r.getId();
             Notifications n = new Notifications();
             n.setNotificationMessage2(NotificationMessage1);
             n.setNotificationMessage3(NotificationMessage1);
             n.setNotificationMessage4(NotificationMessage1);
             nController.create(n);
             notificationList = nController.findNotificationsEntities();
-            
-        }
-        else {
-           // YouGotNotifcation = "";
+
+        } else {
+            // YouGotNotifcation = "";
         }
     }
-    public void NewTask(int i, ResignationRequest r){
-      
-         System.out.println("user id is equal " + CurrentUID + " ==" + r.getUserID() + " i ->>>> " + i+" ->> found ");
-          
-         
+
+    public void NewTask(int i, ResignationRequest r) {
+
+        System.out.println("user id is equal " + CurrentUID + " ==" + r.getUserID() + " i ->>>> " + i + " ->> found ");
+
         // YouGotNotifcation = "You got new task to do" + r.getName() +" has applied for resign his notes are " + r.getNotes() + ", please follow up with his request #"
-                 //+ r.getId();
-         
+        //+ r.getId();
     }
 
     public List<Users> getUsersList() {
@@ -1262,14 +1298,11 @@ public class Controller {
         usersList = uController.findUsersEntities(); //retrieves all the users from the database
         resignList = rController.findResignationRequestEntities(); //retrieves all the resigns from the database
         workerList = wController.findWorkerEntities(); // to fetch worker information and insert it into the list
-        notificationList =nController.findNotificationsEntities();
+        notificationList = nController.findNotificationsEntities();
         Users user = uController.login(username, password, type);
 
-      
         CurrentUID = user.getId();
-   
 
-   
         System.out.println("\n\n\n test test " + username + " -- " + password + "user id is " + user.getId());
         if (user == null) {
             return null;

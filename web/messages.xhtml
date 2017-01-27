@@ -9,52 +9,72 @@
 
     <ui:define name="content">
         <h:body style=" height:100%" onload="#{controller.accessUserInfo()}">
-          <h:form id="f0" rendered="#{controller.type ==0}" >
+            <h:form id="f0" rendered="#{controller.type ==0}" >
                 <p:messages autoUpdate="true" id="messages" showDetail="true"  />
 
                 <p:toolbar  >
                     <f:facet name="left">
-                       
+
 
                         <p:commandButton value="طباعة" type="button" icon="ui-icon-print" >
                             <p:printer target="image" /></p:commandButton> <p:graphicImage id="image"  />
 
 
-                      
-                       
-                        
+
+
+
 
                     </f:facet>
 
 
                 </p:toolbar>
-                
-                
-                
+                <p:dataTable   tableStyle="width:auto" cellSeparator="true" editMode="cell" editable="true" id="WorkerTable"
+                               var="notification" value="#{controller.notificationList}" paginator="true"   
+                               rows="3" rowIndexVar="index"   style=" size: auto">
 
 
 
 
 
-                  <h:outputLabel   title="نظام العمل والعمال" />
-                    
-                    <object type="application/pdf" data="https://www.hrdf.org.sa/Content/files/labor_system.pdf" height="800px" width="100%" internalinstanceid="4">
-                        Your browser can't display pdf, <a href="https://www.hrdf.org.sa/Content/files/labor_system.pdf">click</a> to download pdf instead.
-                    </object>
-                
-                
+                    <p:column   style="width: 3%" headerText="Message 2">
+
+                        <p:outputLabel value="#{notification.notificationMessage2}"/>
 
 
 
-              
-                 
+
+                    </p:column>
+
+
+                    <p:column   style="width: 3%" headerText="Message 3">
+
+                        <p:outputLabel value="#{notification.notificationMessage3}"/>
+
+
+
+
+                    </p:column>
+                    <p:column   style="width: 3%" headerText="Message 4">
+
+                        <p:outputLabel value="#{notification.notificationMessage4}"/>
+
+
+
+
+                    </p:column>
+
+                </p:dataTable>
+
+
+
+
 
 
             </h:form>
             <p:outputLabel  style="color:white" rendered="#{controller.type !=0}" value="OOPs!"/>
         </h:body>
-                
-                
+
+
     </ui:define>
 
 </ui:composition>
