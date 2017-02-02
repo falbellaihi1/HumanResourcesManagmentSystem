@@ -28,7 +28,7 @@ import query.exceptions.NonexistentEntityException;
 public class UsersController implements Serializable {
 
     public UsersController() {
-        this.emf = Persistence.createEntityManagerFactory("PlantaloguePU");
+     emf =Persistence.createEntityManagerFactory("PlantaloguePU");
     }
     private EntityManagerFactory emf = null;
 
@@ -189,25 +189,7 @@ public class UsersController implements Serializable {
         }
     }
 
-    public int getUsersCount() {
-        EntityManager em = getEntityManager();
-        try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Users> rt = cq.from(Users.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
-            return ((Long) q.getSingleResult()).intValue();
-        } finally {
-            em.close();
-        }
-    }
-    
-    
-    
-    
-    
-    
-     public Users login(String username, String password, int t)
+      public Users login(String username, String password, int t)
    {
        try
        {
@@ -229,7 +211,7 @@ public class UsersController implements Serializable {
          EntityManager em = getEntityManager();
          em.remove(em);
      }
-
+    
     public Users findU(String value) {
         try
        {
@@ -244,7 +226,19 @@ public class UsersController implements Serializable {
             return null;
        }
     }
-     
     
+    
+    public int getUsersCount() {
+        EntityManager em = getEntityManager();
+        try {
+            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+            Root<Users> rt = cq.from(Users.class);
+            cq.select(em.getCriteriaBuilder().count(rt));
+            Query q = em.createQuery(cq);
+            return ((Long) q.getSingleResult()).intValue();
+        } finally {
+            em.close();
+        }
+    }
     
 }

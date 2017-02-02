@@ -3,12 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package EntityBeans;
+package EntityBeans.exceptions;
 
 import java.io.Serializable;
-import java.util.Collection;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,29 +15,30 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author Falbe
  */
 @Entity
-@Table(name = "users")
+@Table(name = "sadahemp")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Users.findAll", query = "SELECT u FROM Users u"),
-    @NamedQuery(name = "Users.findById", query = "SELECT u FROM Users u WHERE u.id = :id"),
-    @NamedQuery(name = "Users.findByUsername", query = "SELECT u FROM Users u WHERE u.username = :username"),
-    @NamedQuery(name = "Users.findByPassword", query = "SELECT u FROM Users u WHERE u.password = :password"),
-    @NamedQuery(name = "Users.findByType", query = "SELECT u FROM Users u WHERE u.type = :type"),
-    @NamedQuery(name = "Users.findByPictureID", query = "SELECT u FROM Users u WHERE u.pictureID = :pictureID"),
-    @NamedQuery(name = "Users.findByName", query = "SELECT u FROM Users u WHERE u.name = :name"),
-    @NamedQuery(name = "Users.findByUsernameAndPassword", query = "SELECT u FROM Users u WHERE u.username = :username and u.password=:password and u.type=:type"),
-    @NamedQuery(name = "Users.findByEmployenum", query = "SELECT u FROM Users u WHERE u.employenum = :employenum")})
-public class Users implements Serializable {
+    @NamedQuery(name = "Sadahemp.findAll", query = "SELECT s FROM Sadahemp s"),
+    @NamedQuery(name = "Sadahemp.findById", query = "SELECT s FROM Sadahemp s WHERE s.id = :id"),
+    @NamedQuery(name = "Sadahemp.findByUsername", query = "SELECT s FROM Sadahemp s WHERE s.username = :username"),
+    @NamedQuery(name = "Sadahemp.findByPassword", query = "SELECT s FROM Sadahemp s WHERE s.password = :password"),
+    @NamedQuery(name = "Sadahemp.findByType", query = "SELECT s FROM Sadahemp s WHERE s.type = :type"),
+    @NamedQuery(name = "Sadahemp.findByPictureID", query = "SELECT s FROM Sadahemp s WHERE s.pictureID = :pictureID"),
+    @NamedQuery(name = "Sadahemp.findByName", query = "SELECT s FROM Sadahemp s WHERE s.name = :name"),
+    @NamedQuery(name = "Sadahemp.findByEmployenum", query = "SELECT s FROM Sadahemp s WHERE s.employenum = :employenum"),
+    @NamedQuery(name = "Sadahemp.findByVacationBalance", query = "SELECT s FROM Sadahemp s WHERE s.vacationBalance = :vacationBalance"),
+    @NamedQuery(name = "Sadahemp.findByLeavePermissiontimes", query = "SELECT s FROM Sadahemp s WHERE s.leavePermissiontimes = :leavePermissiontimes"),
+    @NamedQuery(name = "Sadahemp.findByNotes", query = "SELECT s FROM Sadahemp s WHERE s.notes = :notes"),
+    @NamedQuery(name = "Sadahemp.findBySalary", query = "SELECT s FROM Sadahemp s WHERE s.salary = :salary")})
+public class Sadahemp implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -73,17 +72,27 @@ public class Users implements Serializable {
     @Basic(optional = false)
     @Column(name = "Employe_num")
     private String employenum;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userID")
-    private Collection<ResignationRequest> resignationRequestCollection;
+    @Basic(optional = false)
+    @Column(name = "Vacation_Balance")
+    private int vacationBalance;
+    @Basic(optional = false)
+    @Column(name = "Leave_Permission_times")
+    private int leavePermissiontimes;
+    @Basic(optional = false)
+    @Column(name = "Notes")
+    private String notes;
+    @Basic(optional = false)
+    @Column(name = "Salary")
+    private String salary;
 
-    public Users() {
+    public Sadahemp() {
     }
 
-    public Users(Integer id) {
+    public Sadahemp(Integer id) {
         this.id = id;
     }
 
-    public Users(Integer id, String username, String password, int type, String pictureID, String name, String email, String phone, String employenum) {
+    public Sadahemp(Integer id, String username, String password, int type, String pictureID, String name, String email, String phone, String employenum, int vacationBalance, int leavePermissiontimes, String notes, String salary) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -93,6 +102,10 @@ public class Users implements Serializable {
         this.email = email;
         this.phone = phone;
         this.employenum = employenum;
+        this.vacationBalance = vacationBalance;
+        this.leavePermissiontimes = leavePermissiontimes;
+        this.notes = notes;
+        this.salary = salary;
     }
 
     public Integer getId() {
@@ -167,13 +180,36 @@ public class Users implements Serializable {
         this.employenum = employenum;
     }
 
-    @XmlTransient
-    public Collection<ResignationRequest> getResignationRequestCollection() {
-        return resignationRequestCollection;
+    public int getVacationBalance() {
+        return vacationBalance;
     }
 
-    public void setResignationRequestCollection(Collection<ResignationRequest> resignationRequestCollection) {
-        this.resignationRequestCollection = resignationRequestCollection;
+    public void setVacationBalance(int vacationBalance) {
+        this.vacationBalance = vacationBalance;
+    }
+
+    public int getLeavePermissiontimes() {
+        return leavePermissiontimes;
+    }
+
+    public void setLeavePermissiontimes(int leavePermissiontimes) {
+        this.leavePermissiontimes = leavePermissiontimes;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public String getSalary() {
+        return salary;
+    }
+
+    public void setSalary(String salary) {
+        this.salary = salary;
     }
 
     @Override
@@ -186,10 +222,10 @@ public class Users implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Users)) {
+        if (!(object instanceof Sadahemp)) {
             return false;
         }
-        Users other = (Users) object;
+        Sadahemp other = (Sadahemp) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -198,11 +234,7 @@ public class Users implements Serializable {
 
     @Override
     public String toString() {
-        return name;
+        return "EntityBeans.exceptions.Sadahemp[ id=" + id + " ]";
     }
-
-    public int toStringNumber() {
-        return id;
-    }
-
+    
 }

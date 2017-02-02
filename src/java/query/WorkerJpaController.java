@@ -12,7 +12,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.Persistence;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import query.exceptions.NonexistentEntityException;
@@ -21,10 +20,10 @@ import query.exceptions.NonexistentEntityException;
  *
  * @author Falbe
  */
-public class WorkerController implements Serializable {
+public class WorkerJpaController implements Serializable {
 
-    public WorkerController() {
-          emf =Persistence.createEntityManagerFactory("PlantaloguePU");
+    public WorkerJpaController(EntityManagerFactory emf) {
+        this.emf = emf;
     }
     private EntityManagerFactory emf = null;
 

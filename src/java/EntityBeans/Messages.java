@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package EntityBeans;
+package EntityBeans.exceptions;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
@@ -22,21 +22,22 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Falbe
  */
 @Entity
-@Table(name = "notifications")
+@Table(name = "messages")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Notifications.findAll", query = "SELECT n FROM Notifications n"),
-    @NamedQuery(name = "Notifications.findById", query = "SELECT n FROM Notifications n WHERE n.id = :id"),
-    @NamedQuery(name = "Notifications.findByNotificationMessage2", query = "SELECT n FROM Notifications n WHERE n.notificationMessage2 = :notificationMessage2"),
-    @NamedQuery(name = "Notifications.findByNotificationMessage3", query = "SELECT n FROM Notifications n WHERE n.notificationMessage3 = :notificationMessage3"),
-    @NamedQuery(name = "Notifications.findByNotificationMessage4", query = "SELECT n FROM Notifications n WHERE n.notificationMessage4 = :notificationMessage4")})
-public class Notifications implements Serializable {
+    @NamedQuery(name = "Messages.findAll", query = "SELECT m FROM Messages m"),
+    @NamedQuery(name = "Messages.findById", query = "SELECT m FROM Messages m WHERE m.id = :id"),
+    @NamedQuery(name = "Messages.findByNotificationMessage2", query = "SELECT m FROM Messages m WHERE m.notificationMessage2 = :notificationMessage2"),
+    @NamedQuery(name = "Messages.findByNotificationMessage3", query = "SELECT m FROM Messages m WHERE m.notificationMessage3 = :notificationMessage3"),
+    @NamedQuery(name = "Messages.findByNotificationMessage4", query = "SELECT m FROM Messages m WHERE m.notificationMessage4 = :notificationMessage4"),
+    @NamedQuery(name = "Messages.findByUserID", query = "SELECT m FROM Messages m WHERE m.userID = :userID")})
+public class Messages implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
+    @Column(name = "ID")
     private Integer id;
     @Basic(optional = false)
     @Column(name = "NotificationMessage2")
@@ -47,19 +48,23 @@ public class Notifications implements Serializable {
     @Basic(optional = false)
     @Column(name = "NotificationMessage4")
     private String notificationMessage4;
+    @Basic(optional = false)
+    @Column(name = "UserID")
+    private int userID;
 
-    public Notifications() {
+    public Messages() {
     }
 
-    public Notifications(Integer id) {
+    public Messages(Integer id) {
         this.id = id;
     }
 
-    public Notifications(Integer id, String notificationMessage2, String notificationMessage3, String notificationMessage4) {
+    public Messages(Integer id, String notificationMessage2, String notificationMessage3, String notificationMessage4, int userID) {
         this.id = id;
         this.notificationMessage2 = notificationMessage2;
         this.notificationMessage3 = notificationMessage3;
         this.notificationMessage4 = notificationMessage4;
+        this.userID = userID;
     }
 
     public Integer getId() {
@@ -94,6 +99,14 @@ public class Notifications implements Serializable {
         this.notificationMessage4 = notificationMessage4;
     }
 
+    public int getUserID() {
+        return userID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -104,10 +117,10 @@ public class Notifications implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Notifications)) {
+        if (!(object instanceof Messages)) {
             return false;
         }
-        Notifications other = (Notifications) object;
+        Messages other = (Messages) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -116,7 +129,7 @@ public class Notifications implements Serializable {
 
     @Override
     public String toString() {
-        return "EntityBeans.Notifications[ id=" + id + " ]";
+        return "EntityBeans.exceptions.Messages[ id=" + id + " ]";
     }
     
 }

@@ -259,7 +259,7 @@ public class Worker implements Serializable {
 
     @Override
     public String toString() {
-        return "EntityBeans.Worker[ id=" + id + " ]";
+        return "EntityBeans.exceptions.Worker[ id=" + id + " ]";
     }
     
 }

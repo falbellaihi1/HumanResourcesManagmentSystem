@@ -5,7 +5,7 @@
  */
 package query;
 
-import EntityBeans.Worker;
+import EntityBeans.exceptions.MafResignrequestarchive;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -21,10 +21,10 @@ import query.exceptions.NonexistentEntityException;
  *
  * @author Falbe
  */
-public class WorkerController implements Serializable {
+public class MafResignrequestarchiveController implements Serializable {
 
-    public WorkerController() {
-          emf =Persistence.createEntityManagerFactory("PlantaloguePU");
+    public MafResignrequestarchiveController() {
+        emf =Persistence.createEntityManagerFactory("PlantaloguePU");
     }
     private EntityManagerFactory emf = null;
 
@@ -32,12 +32,12 @@ public class WorkerController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Worker worker) {
+    public void create(MafResignrequestarchive mafResignrequestarchive) {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            em.persist(worker);
+            em.persist(mafResignrequestarchive);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -46,19 +46,19 @@ public class WorkerController implements Serializable {
         }
     }
 
-    public void edit(Worker worker) throws NonexistentEntityException, Exception {
+    public void edit(MafResignrequestarchive mafResignrequestarchive) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            worker = em.merge(worker);
+            mafResignrequestarchive = em.merge(mafResignrequestarchive);
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Integer id = worker.getId();
-                if (findWorker(id) == null) {
-                    throw new NonexistentEntityException("The worker with id " + id + " no longer exists.");
+                Integer id = mafResignrequestarchive.getId();
+                if (findMafResignrequestarchive(id) == null) {
+                    throw new NonexistentEntityException("The mafResignrequestarchive with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -74,14 +74,14 @@ public class WorkerController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Worker worker;
+            MafResignrequestarchive mafResignrequestarchive;
             try {
-                worker = em.getReference(Worker.class, id);
-                worker.getId();
+                mafResignrequestarchive = em.getReference(MafResignrequestarchive.class, id);
+                mafResignrequestarchive.getId();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The worker with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The mafResignrequestarchive with id " + id + " no longer exists.", enfe);
             }
-            em.remove(worker);
+            em.remove(mafResignrequestarchive);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -90,19 +90,19 @@ public class WorkerController implements Serializable {
         }
     }
 
-    public List<Worker> findWorkerEntities() {
-        return findWorkerEntities(true, -1, -1);
+    public List<MafResignrequestarchive> findMafResignrequestarchiveEntities() {
+        return findMafResignrequestarchiveEntities(true, -1, -1);
     }
 
-    public List<Worker> findWorkerEntities(int maxResults, int firstResult) {
-        return findWorkerEntities(false, maxResults, firstResult);
+    public List<MafResignrequestarchive> findMafResignrequestarchiveEntities(int maxResults, int firstResult) {
+        return findMafResignrequestarchiveEntities(false, maxResults, firstResult);
     }
 
-    private List<Worker> findWorkerEntities(boolean all, int maxResults, int firstResult) {
+    private List<MafResignrequestarchive> findMafResignrequestarchiveEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Worker.class));
+            cq.select(cq.from(MafResignrequestarchive.class));
             Query q = em.createQuery(cq);
             if (!all) {
                 q.setMaxResults(maxResults);
@@ -114,20 +114,20 @@ public class WorkerController implements Serializable {
         }
     }
 
-    public Worker findWorker(Integer id) {
+    public MafResignrequestarchive findMafResignrequestarchive(Integer id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(Worker.class, id);
+            return em.find(MafResignrequestarchive.class, id);
         } finally {
             em.close();
         }
     }
 
-    public int getWorkerCount() {
+    public int getMafResignrequestarchiveCount() {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Worker> rt = cq.from(Worker.class);
+            Root<MafResignrequestarchive> rt = cq.from(MafResignrequestarchive.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();

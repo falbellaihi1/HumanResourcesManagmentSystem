@@ -9,11 +9,30 @@
     <class>EntityBeans.Plants</class>
     <class>EntityBeans.Users</class>
     <class>EntityBeans.ResignationRequest</class>
-    <class>EntityBeans.Worker</class>
     <class>EntityBeans.Notifications</class>
+    <class>EntityBeans.MafResignrequestarchive</class>
+    <class>EntityBeans.SadResignrequestarchive</class>
+    <class>EntityBeans.BrosResignrequestarchive</class>
+    <class>EntityBeans.SajResignrequestarchive</class>
+    <class>EntityBeans.Saajemp</class>
+    <class>EntityBeans.Sadahemp</class>
+    <class>EntityBeans.Messages</class>
+    <class>EntityBeans.Brosteremp</class>
+    <class>EntityBeans.Mafaheememp</class>
+    <class>EntityBeans.exceptions.Messages</class>
+    <class>EntityBeans.exceptions.Saajemp</class>
+    <class>EntityBeans.exceptions.BrosResignrequestarchive</class>
+    <class>EntityBeans.exceptions.Sadahemp</class>
+    <class>EntityBeans.exceptions.Mafaheememp</class>
+    <class>EntityBeans.exceptions.ResignationRequest</class>
+    <class>EntityBeans.exceptions.SadResignrequestarchive</class>
+    <class>EntityBeans.exceptions.SajResignrequestarchive</class>
+    <class>EntityBeans.exceptions.MafResignrequestarchive</class>
+    <class>EntityBeans.exceptions.Brosteremp</class>
+    <class>EntityBeans.Worker</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/falbella_plant?zeroDateTimeBehavior=convertToNull"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/mits_db?zeroDateTimeBehavior=convertToNull"/>
       <property name="javax.persistence.jdbc.user" value="root"/>
       <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
       <property name="javax.persistence.jdbc.password" value=""/>

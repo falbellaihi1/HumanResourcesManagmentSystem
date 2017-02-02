@@ -5,7 +5,7 @@
  */
 package query;
 
-import EntityBeans.Worker;
+import EntityBeans.exceptions.BrosResignrequestarchive;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -21,10 +21,10 @@ import query.exceptions.NonexistentEntityException;
  *
  * @author Falbe
  */
-public class WorkerController implements Serializable {
+public class BrosResignrequestarchiveController implements Serializable {
 
-    public WorkerController() {
-          emf =Persistence.createEntityManagerFactory("PlantaloguePU");
+    public BrosResignrequestarchiveController() {
+        emf =Persistence.createEntityManagerFactory("PlantaloguePU");
     }
     private EntityManagerFactory emf = null;
 
@@ -32,12 +32,12 @@ public class WorkerController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Worker worker) {
+    public void create(BrosResignrequestarchive brosResignrequestarchive) {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            em.persist(worker);
+            em.persist(brosResignrequestarchive);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -46,19 +46,19 @@ public class WorkerController implements Serializable {
         }
     }
 
-    public void edit(Worker worker) throws NonexistentEntityException, Exception {
+    public void edit(BrosResignrequestarchive brosResignrequestarchive) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            worker = em.merge(worker);
+            brosResignrequestarchive = em.merge(brosResignrequestarchive);
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Integer id = worker.getId();
-                if (findWorker(id) == null) {
-                    throw new NonexistentEntityException("The worker with id " + id + " no longer exists.");
+                Integer id = brosResignrequestarchive.getId();
+                if (findBrosResignrequestarchive(id) == null) {
+                    throw new NonexistentEntityException("The brosResignrequestarchive with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -74,14 +74,14 @@ public class WorkerController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Worker worker;
+            BrosResignrequestarchive brosResignrequestarchive;
             try {
-                worker = em.getReference(Worker.class, id);
-                worker.getId();
+                brosResignrequestarchive = em.getReference(BrosResignrequestarchive.class, id);
+                brosResignrequestarchive.getId();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The worker with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The brosResignrequestarchive with id " + id + " no longer exists.", enfe);
             }
-            em.remove(worker);
+            em.remove(brosResignrequestarchive);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -90,19 +90,19 @@ public class WorkerController implements Serializable {
         }
     }
 
-    public List<Worker> findWorkerEntities() {
-        return findWorkerEntities(true, -1, -1);
+    public List<BrosResignrequestarchive> findBrosResignrequestarchiveEntities() {
+        return findBrosResignrequestarchiveEntities(true, -1, -1);
     }
 
-    public List<Worker> findWorkerEntities(int maxResults, int firstResult) {
-        return findWorkerEntities(false, maxResults, firstResult);
+    public List<BrosResignrequestarchive> findBrosResignrequestarchiveEntities(int maxResults, int firstResult) {
+        return findBrosResignrequestarchiveEntities(false, maxResults, firstResult);
     }
 
-    private List<Worker> findWorkerEntities(boolean all, int maxResults, int firstResult) {
+    private List<BrosResignrequestarchive> findBrosResignrequestarchiveEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Worker.class));
+            cq.select(cq.from(BrosResignrequestarchive.class));
             Query q = em.createQuery(cq);
             if (!all) {
                 q.setMaxResults(maxResults);
@@ -114,20 +114,20 @@ public class WorkerController implements Serializable {
         }
     }
 
-    public Worker findWorker(Integer id) {
+    public BrosResignrequestarchive findBrosResignrequestarchive(Integer id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(Worker.class, id);
+            return em.find(BrosResignrequestarchive.class, id);
         } finally {
             em.close();
         }
     }
 
-    public int getWorkerCount() {
+    public int getBrosResignrequestarchiveCount() {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Worker> rt = cq.from(Worker.class);
+            Root<BrosResignrequestarchive> rt = cq.from(BrosResignrequestarchive.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();

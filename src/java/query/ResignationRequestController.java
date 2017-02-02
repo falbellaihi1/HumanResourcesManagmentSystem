@@ -25,7 +25,7 @@ import query.exceptions.NonexistentEntityException;
 public class ResignationRequestController implements Serializable {
 
     public ResignationRequestController() {
-        this.emf = Persistence.createEntityManagerFactory("PlantaloguePU");
+         emf =Persistence.createEntityManagerFactory("PlantaloguePU");
     }
     private EntityManagerFactory emf = null;
 

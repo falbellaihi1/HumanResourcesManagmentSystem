@@ -4,11 +4,12 @@
  * and open the template in the editor.
  */
 
-import EntityBeans.Notifications;
+
 import EntityBeans.ResignationRequest;
 
 import EntityBeans.Users;
 import EntityBeans.Worker;
+import EntityBeans.exceptions.Messages;
 import com.mysql.jdbc.Connection;
 import java.io.FileNotFoundException;
 
@@ -43,7 +44,7 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import query.NotificationsController;
+import query.MessagesController;
 import query.ResignationRequestController;
 
 import query.UsersController;
@@ -190,8 +191,8 @@ public class Controller {
     private String NotificationMessage1;
     private String NotificationMessage2;
     private String NotificationMessage3;
-    private List<Notifications> notificationList;
-    private NotificationsController nController = new NotificationsController();
+    private List<Messages> notificationList;
+    private MessagesController nController = new MessagesController();
 
     /*End of todo*/
  /*Government Affairs tasks */
@@ -267,11 +268,11 @@ public class Controller {
         this.NotificationMessage3 = NotificationMessage3;
     }
 
-    public List<Notifications> getNotificationList() {
+    public List<Messages> getNotificationList() {
         return notificationList;
     }
 
-    public void setNotificationList(List<Notifications> notificationList) {
+    public void setNotificationList(List<Messages> notificationList) {
         this.notificationList = notificationList;
     }
 
@@ -714,11 +715,10 @@ public class Controller {
         Path file = null;
         try {
             file = Files.createTempFile(uploadFolder, fileName, ext);
-            InputStream input = event.getFile().getInputstream();
-            Files.copy(input, file, StandardCopyOption.REPLACE_EXISTING);
-            input.close();
+            try (InputStream input = event.getFile().getInputstream()) {
+                Files.copy(input, file, StandardCopyOption.REPLACE_EXISTING);
+            }
         } catch (IOException ex) {
-            ex.printStackTrace();
         }
         int userIndex = Integer.parseInt(event.getComponent().getAttributes().get("user").toString());
         SelectedUser = this.usersList.get(userIndex);
@@ -768,10 +768,10 @@ public class Controller {
             cell.setCellValue(resultSet.getString("dept"));
             i++;
         }
-        FileOutputStream out = new FileOutputStream(
-                new File("exceldatabase.xlsx"));
-        workbook.write(out);
-        out.close();
+        try (FileOutputStream out = new FileOutputStream(
+                new File("exceldatabase.xlsx"))) {
+            workbook.write(out);
+        }
         System.out.println(
                 "exceldatabase.xlsx written successfully");
     }
@@ -1074,10 +1074,7 @@ public class Controller {
             newUser.setPictureID(PictureID);
             newUser.setName(NameOfUser);
             newUser.setEmployenum(Employee_Num);
-            newUser.setLeavePermissiontimes(Permission_times);
-            newUser.setVacationBalance(Vacation_Balance);
-            newUser.setNotes(Comments);
-            newUser.setSalary(Salary);
+            
 
             uController.create(newUser);
 
@@ -1156,14 +1153,12 @@ public class Controller {
         ProfileEmployeename = user.getName();
         ProfileUserName = user.getUsername();
         ProfileEmployeeNumber = user.getEmployenum();
-        ProfileSickLeave = user.getLeavePermissiontimes();
-        ProfileVacationBalance = user.getVacationBalance();
+       
         Profiletype = user.getType();
         ProfilePhoneNumber = user.getPhone();
         ProfileEmailAddress = user.getEmail();
         ProfilePicture = user.getPictureID();
-        ProfileSalary = user.getSalary();
-
+      
     }
 
     public void createResignRequest() {
@@ -1228,12 +1223,12 @@ public class Controller {
             NewTask(i, r);
             NotificationMessage1 = "You got new task to do" + r.getName() + " has applied for resign his notes are " + r.getNotes() + ", please follow up with his request #"
                     + r.getId();
-            Notifications n = new Notifications();
+            Messages n = new Messages();
             n.setNotificationMessage2(NotificationMessage1);
             n.setNotificationMessage3(NotificationMessage1);
             n.setNotificationMessage4(NotificationMessage1);
             nController.create(n);
-            notificationList = nController.findNotificationsEntities();
+            notificationList = nController.findMessagesEntities();
 
         } else {
             // YouGotNotifcation = "";
@@ -1298,7 +1293,7 @@ public class Controller {
         usersList = uController.findUsersEntities(); //retrieves all the users from the database
         resignList = rController.findResignationRequestEntities(); //retrieves all the resigns from the database
         workerList = wController.findWorkerEntities(); // to fetch worker information and insert it into the list
-        notificationList = nController.findNotificationsEntities();
+        notificationList = nController.findMessagesEntities();
         Users user = uController.login(username, password, type);
 
         CurrentUID = user.getId();

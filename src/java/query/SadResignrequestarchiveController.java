@@ -5,7 +5,7 @@
  */
 package query;
 
-import EntityBeans.Notifications;
+import EntityBeans.exceptions.SadResignrequestarchive;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -21,10 +21,10 @@ import query.exceptions.NonexistentEntityException;
  *
  * @author Falbe
  */
-public class NotificationsController implements Serializable {
+public class SadResignrequestarchiveController implements Serializable {
 
-    public NotificationsController() {
-        this.emf = Persistence.createEntityManagerFactory("PlantaloguePU");
+    public SadResignrequestarchiveController() {
+       emf =Persistence.createEntityManagerFactory("PlantaloguePU");
     }
     private EntityManagerFactory emf = null;
 
@@ -32,12 +32,12 @@ public class NotificationsController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Notifications notifications) {
+    public void create(SadResignrequestarchive sadResignrequestarchive) {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            em.persist(notifications);
+            em.persist(sadResignrequestarchive);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -46,19 +46,19 @@ public class NotificationsController implements Serializable {
         }
     }
 
-    public void edit(Notifications notifications) throws NonexistentEntityException, Exception {
+    public void edit(SadResignrequestarchive sadResignrequestarchive) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            notifications = em.merge(notifications);
+            sadResignrequestarchive = em.merge(sadResignrequestarchive);
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Integer id = notifications.getId();
-                if (findNotifications(id) == null) {
-                    throw new NonexistentEntityException("The notifications with id " + id + " no longer exists.");
+                Integer id = sadResignrequestarchive.getId();
+                if (findSadResignrequestarchive(id) == null) {
+                    throw new NonexistentEntityException("The sadResignrequestarchive with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -74,14 +74,14 @@ public class NotificationsController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Notifications notifications;
+            SadResignrequestarchive sadResignrequestarchive;
             try {
-                notifications = em.getReference(Notifications.class, id);
-                notifications.getId();
+                sadResignrequestarchive = em.getReference(SadResignrequestarchive.class, id);
+                sadResignrequestarchive.getId();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The notifications with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The sadResignrequestarchive with id " + id + " no longer exists.", enfe);
             }
-            em.remove(notifications);
+            em.remove(sadResignrequestarchive);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -90,19 +90,19 @@ public class NotificationsController implements Serializable {
         }
     }
 
-    public List<Notifications> findNotificationsEntities() {
-        return findNotificationsEntities(true, -1, -1);
+    public List<SadResignrequestarchive> findSadResignrequestarchiveEntities() {
+        return findSadResignrequestarchiveEntities(true, -1, -1);
     }
 
-    public List<Notifications> findNotificationsEntities(int maxResults, int firstResult) {
-        return findNotificationsEntities(false, maxResults, firstResult);
+    public List<SadResignrequestarchive> findSadResignrequestarchiveEntities(int maxResults, int firstResult) {
+        return findSadResignrequestarchiveEntities(false, maxResults, firstResult);
     }
 
-    private List<Notifications> findNotificationsEntities(boolean all, int maxResults, int firstResult) {
+    private List<SadResignrequestarchive> findSadResignrequestarchiveEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Notifications.class));
+            cq.select(cq.from(SadResignrequestarchive.class));
             Query q = em.createQuery(cq);
             if (!all) {
                 q.setMaxResults(maxResults);
@@ -114,20 +114,20 @@ public class NotificationsController implements Serializable {
         }
     }
 
-    public Notifications findNotifications(Integer id) {
+    public SadResignrequestarchive findSadResignrequestarchive(Integer id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(Notifications.class, id);
+            return em.find(SadResignrequestarchive.class, id);
         } finally {
             em.close();
         }
     }
 
-    public int getNotificationsCount() {
+    public int getSadResignrequestarchiveCount() {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Notifications> rt = cq.from(Notifications.class);
+            Root<SadResignrequestarchive> rt = cq.from(SadResignrequestarchive.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();

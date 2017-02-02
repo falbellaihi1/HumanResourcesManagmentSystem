@@ -9,42 +9,39 @@
         <ps:menu>
             <f:facet name="options">
                 <p:commandButton type="button" icon="fa fa-search Fs18 white" styleClass="Fright"/>
-                <p:inputText placeholder="Search" styleClass="Fright"/> 
-                <p:inputText id="text"  required="false" label="text" value="#{controller.SU}"  />
-                <p:commandButton id="cm" action="#{controller.searchUser()}" icon="ui-icon-search" oncomplete="PF('result').show();"/> 
+                <p:inputText placeholder="Search" styleClass="Fright"/>    
             </f:facet>
             <p:submenu label="الموظفين" icon="fa fa-paint-brush">
                 <p:menuitem value="ادارة الموظفين" icon="fa fa-laptop" outcome="ManageEmployee"  />
                 <p:menuitem value="الطلبات" icon="fa fa-tasks" outcome="requests"  />
                 <p:menuitem value="نظام العمل" icon="fa fa-building" outcome="workinformation"  />
                 <p:menuitem value="الرواتب" icon="fa fa-money" outcome="calender"  />
-
-
+                
+      
             </p:submenu>
 
             <p:separator />
 
             <p:submenu label="العلاقات الحكومية" icon="fa fa-newspaper-o">
                 <p:menuitem value="ادارة العمال" icon="fa fa-columns" outcome="governmentAffairs" />
-                <p:menuitem value="ادارة المعقبين" icon="fa fa-columns" outcome="governmentAffairstasks" />
-
+            
             </p:submenu>
 
             <p:separator />
 
             <p:submenu label="العلاقات البنكية" icon="fa fa-money">
                 <p:menuitem value="ادارة المعاملات البنكية" icon="fa fa-credit-card-alt" outcome="BankAffairs"/>
-
+            
             </p:submenu>
 
             <p:separator />
 
 
-            <p:submenu label="المحاسبة" icon="fa fa-money">
+             <p:submenu label="المحاسبة" icon="fa fa-money">
                 <p:menuitem value="الحسابات" icon="fa fa-credit-card-alt" outcome="Accounting"/>
-
+            
             </p:submenu>
-
+       
 
         </ps:menu>
     </h:form>
